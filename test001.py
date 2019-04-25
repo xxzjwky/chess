@@ -31,6 +31,30 @@ list_chess = [
     [(57,740),(136,740),(215,740),(294,740),(374,740),(454,740),(532,740),(611,740),(690,740)]
 ]
 
+#以下初始化方法，都是按直观的左右辨别，顺序从左到右
+#初始化左黑车
+pos_black_left_cart = list_chess[0][0]
+img_black_left_cart = PhotoImage(file='image/black_cart.gif')
+label_black_img_left_cart = Label(win, image=img_black_left_cart)
+label_black_img_left_cart.pack()
+label_black_img_left_cart.place(x=pos_black_left_cart[0], y=pos_black_left_cart[1],anchor=NW)
+
+
+#初始化右黑车
+pos_black_right_cart = list_chess[0][8]
+img_black_right_cart = PhotoImage(file='image/black_cart.gif')
+label_black_img_right_cart = Label(win, image=img_black_right_cart)
+label_black_img_right_cart.pack()
+label_black_img_right_cart.place(x=pos_black_right_cart[0], y=pos_black_right_cart[1],anchor=NW)
+
+
+
+
+
+
+
+
+win.update()
 # 进入消息循环
 win.mainloop()
 
