@@ -11,11 +11,25 @@ def showlocation(event):
 
 
 
-img_gif = PhotoImage(file = '/home/tarena/chess.gif')
+img_gif = PhotoImage(file = '/home/tarena/chess1.gif')
 label_img = Label(win, image = img_gif)
 label_img.bind("<Button-1>", showlocation)
 label_img.pack()
 win.update()
+
+# img_gif1 = PhotoImage(file='/home/tarena/红车1.gif')
+# label_img1 = Label(win, image=img_gif1)
+# # label_img.bind("<Button-1>", showlocation)
+# label_img1.pack()
+# label_img1.place(x=57, y=25)
+# win.update()
+#
+# img_gif2 = PhotoImage(file='/home/tarena/红车1.gif')
+# label_img2 = Label(win, image=img_gif1)
+# # label_img.bind("<Button-1>", showlocation)
+# label_img2.pack()
+# label_img2.place(x=57, y=105)
+# win.update()
 
 #棋盘列表
 list_chess = [
@@ -31,9 +45,16 @@ list_chess = [
     [(57,740),(136,740),(215,740),(294,740),(374,740),(454,740),(532,740),(611,740),(690,740)]
 ]
 
+for i in range(10):  # 行数
+    for j in range(9):
+        img_gif1 = PhotoImage(file='/home/tarena/红车1.gif')
+        label_img1 = Label(win, image=img_gif1)
+        # label_img.bind("<Button-1>", showlocation)
+        label_img1.pack()
+        label_img1.place(x=list_chess[i][j][0], y=list_chess[i][j][1])
+        win.update()
+
 
 # 进入消息循环
 win.mainloop()
-
-
 
