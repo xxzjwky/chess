@@ -30,7 +30,7 @@ class Chess:
         :param position: 棋子位置
         """
 
-        self.click_item = click_item
+
         self.color = color
 
 
@@ -41,7 +41,7 @@ class Chess:
     def click(self):
         #点击变黄色背景　并且标记
         self.btn['bg']="yellow"
-        self.click_item["data"]= self
+        click_item["data"]= self
         # print("您刚才通过点击打招呼触发了我:大家好，我是badao！")
 
 
