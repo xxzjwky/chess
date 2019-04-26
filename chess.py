@@ -41,6 +41,10 @@ class Chess:
     def click(self):
         #点击变黄色背景　并且标记
         self.btn['bg']="yellow"
+
+        #连续点子的情况(复原点击前状态)
+        if click_item:
+            click_item["data"].btn['bg'] = "#d1b07e"
         click_item["data"]= self
         # print("您刚才通过点击打招呼触发了我:大家好，我是badao！")
 
@@ -49,9 +53,15 @@ root = Tk(className = "中国象棋")
 root.geometry("800x800")
 
 def showlocation(event):
+    """
+    棋盘点击事件
+    :param event:
+    :return:
+    """
     print(event.x,event.y)
     print(click_item)
     if click_item:
+        #移动棋子
         chess = click_item["data"]
         chess.btn.place(x=event.x, y=event.y)
         chess.btn['bg'] = "#d1b07e"
