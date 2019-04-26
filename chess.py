@@ -17,8 +17,11 @@ list_chess = [
     [(57,740),(136,740),(215,740),(294,740),(374,740),(454,740),(532,740),(611,740),(690,740)]
 ]
 
+click_item = {}
+
+
 class Chess:
-    def __init__(self, root,name,color,position):
+    def __init__(self, root,name,color,position,click_item):
         """
 
         :param root: 全局画布
@@ -27,12 +30,19 @@ class Chess:
         :param position: 棋子位置
         """
 
+        self.click_item = click_item
+        self.color = color
+
+
         ft = tkFont.Font(family='微软雅黑', size=20, weight=tkFont.BOLD)
-        self.hi_there = Button(root,text=name, bg="#d1b07e",fg=color, font=ft,height = "1",width = "1", command=self.click)
-        self.hi_there.pack()
-        self.hi_there.place(x=position[0], y=position[1])
+        self.btn = Button(root,text=name, bg="#d1b07e",fg=color, font=ft,height = "1",width = "1", command=self.click)
+        self.btn.pack()
+        self.btn.place(x=position[0], y=position[1])
     def click(self):
-        print("您刚才通过点击打招呼触发了我:大家好，我是badao！")
+        #点击变黄色背景　并且标记
+        self.btn['bg']="yellow"
+        self.click_item["data"]= self
+        # print("您刚才通过点击打招呼触发了我:大家好，我是badao！")
 
 
 root = Tk(className = "中国象棋")
@@ -40,6 +50,12 @@ root.geometry("800x800")
 
 def showlocation(event):
     print(event.x,event.y)
+    print(click_item)
+    if click_item:
+        chess = click_item["data"]
+        chess.btn.place(x=event.x, y=event.y)
+        chess.btn['bg'] = "#d1b07e"
+        del click_item["data"]
 
 
 #位置都是从画布的左往右
@@ -51,40 +67,7 @@ label_img.pack()
 
 #左黑车
 pos_black_left_rook = list_chess[0][0]
-black_left_rook = Chess(root,"車","black",pos_black_left_rook)
-
-#左黑马
-pos_black_left_knight = list_chess[0][1]
-black_left_knight = Chess(root,"馬","black",pos_black_left_knight)
-
-#左黑象
-pos_black_left_minister = list_chess[0][2]
-black_left_minister = Chess(root,"象","black",pos_black_left_minister)
-
-#左黑士
-pos_black_left_guard = list_chess[0][3]
-black_left_guard = Chess(root,"士","black",pos_black_left_guard)
-
-#黑将
-pos_black_king = list_chess[0][4]
-black_king = Chess(root,"将","black",pos_black_king)
-
-#右黑士
-pos_black_right_guard = list_chess[0][5]
-black_right_guard = Chess(root,"士","black",pos_black_right_guard)
-
-#右黑象
-pos_black_right_minister = list_chess[0][6]
-black_right_minister = Chess(root,"象","black",pos_black_right_minister)
-
-#右黑马
-pos_black_right_knight = list_chess[0][7]
-black_right_knight = Chess(root,"馬","black",pos_black_right_knight)
-
-#右黑车
-pos_black_right_rook = list_chess[0][8]
-black_right_rook = Chess(root,"車","black",pos_black_right_rook)
-
+black_left_rook = Chess(root,"車","black",pos_black_left_rook,click_item)
 
 
 root.update()
