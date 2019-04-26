@@ -46,11 +46,25 @@ class Chess:
         if click_item:
             click_item["data"].btn['bg'] = "#d1b07e"
         click_item["data"]= self
-        # print("您刚才通过点击打招呼触发了我:大家好，我是badao！")
 
 
 root = Tk(className = "中国象棋")
 root.geometry("800x800")
+
+def find_move_location(click_location):
+    """
+    找寻具体移动位置
+    :param click_location:
+    :return:
+    """
+    for i in range(len(list_chess)):
+        for j in range(len(list_chess[i])):
+            chess_one = list_chess[i][j]
+            if abs(chess_one[0] - click_location[0])<40 and abs(chess_one[1] - click_location[1])<40:
+                return chess_one
+
+
+
 
 def showlocation(event):
     """
@@ -63,9 +77,13 @@ def showlocation(event):
     if click_item:
         #移动棋子
         chess = click_item["data"]
-        chess.btn.place(x=event.x, y=event.y)
-        chess.btn['bg'] = "#d1b07e"
-        del click_item["data"]
+
+        move_location =  find_move_location((event.x, event.y))
+
+        if move_location:
+            chess.btn.place(x=move_location[0], y=move_location[1])
+            chess.btn['bg'] = "#d1b07e"
+            del click_item["data"]
 
 #  車      馬         象        士      将     炮    兵/卒
 # rook   knight   minister   guard   king　  gun   Pawn
