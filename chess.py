@@ -49,12 +49,26 @@ class Chess:
         if click_item:
             #颜色相同则切换焦点棋子
             if click_item["data"].color == self.color:
-                # 点击变黄色背景　并且标记
-                self.btn['bg'] = "yellow"
-                click_item["data"].btn['bg'] = "#d1b07e"
-                click_item["data"]= self
+
+                #该次点击和上次点击相同
+                if click_item["data"].position == self.position :
+                    if click_item["data"].btn["bg"] == "yellow":
+                        click_item["data"].btn['bg'] = "#d1b07e"
+                        del click_item["data"]
+                    else:
+                        click_item["data"].btn['bg'] = "yellow"
+                        click_item["data"] = self
+
+                else: # 点击变黄色背景　并且标记
+                    self.btn['bg'] = "yellow"
+                    click_item["data"].btn['bg'] = "#d1b07e"
+                    click_item["data"]= self
             #颜色不同暂时消灭该子
             else:
+
+                #更新当前棋子位置
+                refresh_list_chess(click_item["data"],self.position)
+
                 #获得目标子坐标给焦点子
                 click_item["data"].btn['bg'] = "#d1b07e"
                 click_item["data"].btn.place(x=self.position[0], y=self.position[1])
@@ -71,6 +85,8 @@ class Chess:
         :return:
         """
         self.btn.place_forget()
+        #删除列表中位置
+        remove_data_in_list_chess(self)
 
 
 root = Tk(className = "中国象棋")
@@ -96,7 +112,28 @@ def find_move_location(click_location):
 
                 return chess_one
 
+def refresh_list_chess(chess,move_location):
+    """
+    刷新原来位置
+    :param chess:  原棋子数据
+    :param move_location: 新位置
+    :return:
+    """
+    for item in list_chess:
+        if chess.position == item.position:
+            chess.position = move_location
+            break
 
+def remove_data_in_list_chess(old_chess):
+    """
+    删除被吃掉的子
+    :param old_chess: 废弃子
+    :return:
+    """
+    for item in list_chess:
+        if old_chess.position == item.position:
+            list_chess.remove(item)
+            break
 
 
 def showlocation(event):
@@ -106,7 +143,7 @@ def showlocation(event):
     :return:
     """
 
-    # print(list_chess)
+    # print(len(list_chess))
     # print(click_item)
     # print(event.x,event.y)
     if click_item:
@@ -116,9 +153,13 @@ def showlocation(event):
         move_location =  find_move_location((event.x, event.y))
 
         if move_location:
+            #更新列表中棋子的新位置
+            refresh_list_chess(chess,move_location)
+
             chess.btn.place(x=move_location[0], y=move_location[1])
             chess.btn['bg'] = "#d1b07e"
             del click_item["data"]
+
 
 #  車      馬         象        士      将     炮    兵/卒
 # rook   knight   minister   guard   king　  gun   Pawn
