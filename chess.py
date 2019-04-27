@@ -41,6 +41,7 @@ class Chess:
         self.btn.pack()
         self.btn.place(x=position[0], y=position[1])
 
+        #添加到象棋列表
         list_chess.append(self)
     def click(self):
 
@@ -86,10 +87,12 @@ def find_move_location(click_location):
             chess_one = list_position[i][j]
             if abs(chess_one[0] - click_location[0])<40 and abs(chess_one[1] - click_location[1])<40:
 
-                #删除该点的子
+                #点击的点有子，则不做处理
                 for item in list_chess:
                     if chess_one == item.position:
-                        item.delete()
+                        return None
+                        # item.delete()
+                        # break
 
                 return chess_one
 
