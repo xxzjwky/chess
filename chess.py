@@ -43,13 +43,26 @@ class Chess:
 
         list_chess.append(self)
     def click(self):
-        #点击变黄色背景　并且标记
-        self.btn['bg']="yellow"
 
-        #连续点子的情况(复原点击前状态)
+        #连续点子
         if click_item:
-            click_item["data"].btn['bg'] = "#d1b07e"
-        click_item["data"]= self
+            #颜色相同则切换焦点棋子
+            if click_item["data"].color == self.color:
+                # 点击变黄色背景　并且标记
+                self.btn['bg'] = "yellow"
+                click_item["data"].btn['bg'] = "#d1b07e"
+                click_item["data"]= self
+            #颜色不同暂时消灭该子
+            else:
+                #获得目标子坐标给焦点子
+                click_item["data"].btn['bg'] = "#d1b07e"
+                click_item["data"].btn.place(x=self.position[0], y=self.position[1])
+                del click_item["data"]
+                self.delete()
+        else:
+            # 点击变黄色背景　并且标记
+            self.btn['bg'] = "yellow"
+            click_item["data"] = self
 
     def delete(self):
         """
