@@ -35,7 +35,7 @@ class Minister(Chess):
 
 class Guard(Chess):
     """
-     相
+     士
     """
     def get_passable_positions(self):
         """
@@ -57,7 +57,7 @@ class King(Chess):
 
 class Gun(Chess):
     """
-     将
+     炮
     """
     def get_passable_positions(self):
         """
@@ -69,7 +69,7 @@ class Gun(Chess):
 
 class Pawn(Chess):
     """
-     将
+     兵
     """
     def get_passable_positions(self):
         """
