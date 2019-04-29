@@ -25,16 +25,18 @@ click_item = {}
 
 
 class Chess:
-    def __init__(self, root,name,color,position):
+    def __init__(self, root,name,color,position,pos_in_list):
         """
 
         :param root: 全局画布
         :param name: 棋子名称
         :param color: 棋子颜色
-        :param position: 棋子位置
+        :param position: 棋子坐标
+        :param pos_in_list: 该棋子在列表中的位置
         """
         self.color = color
         self.position = position
+        self.pos_in_list = pos_in_list
 
         ft = tkFont.Font(family='微软雅黑', size=20, weight=tkFont.BOLD)
         self.btn = Button(root,text=name, bg="#d1b07e",fg=color, font=ft,height = "1",width = "1", command=self.click)
@@ -88,6 +90,12 @@ class Chess:
         #删除列表中位置
         remove_data_in_list_chess(self)
 
+    def get_passable_positions(self):
+        """
+        获得该棋子可以移动的所有位置
+        :return:
+        """
+        pass
 
 root = Tk(className = "中国象棋")
 root.geometry("800x800")
@@ -163,7 +171,7 @@ def showlocation(event):
 
 #  車      馬         象        士      将     炮    兵/卒
 # rook   knight   minister   guard   king　  gun   Pawn
-#位置都是从画布的左往右
+#位置都是从画布的左往右pos_in_list
 
 img_gif = PhotoImage(file = 'image/chess.gif')
 label_img = Label(root, image = img_gif)
@@ -172,133 +180,133 @@ label_img.pack()
 
 #左黑车
 pos_black_left_rook = list_position[0][0]
-black_left_rook = Chess(root,"車","black",pos_black_left_rook)
+black_left_rook = Chess(root,"車","black",pos_black_left_rook,(0,0))
 
 #左黑马
 pos_black_left_knight = list_position[0][1]
-black_left_knight = Chess(root,"馬","black",pos_black_left_knight)
+black_left_knight = Chess(root,"馬","black",pos_black_left_knight,(0,1))
 
 #左黑象
 pos_black_left_minister = list_position[0][2]
-black_left_minister = Chess(root,"象","black",pos_black_left_minister)
+black_left_minister = Chess(root,"象","black",pos_black_left_minister,(0,2))
 
 #左黑士
 pos_black_left_guard = list_position[0][3]
-black_left_guard = Chess(root,"士","black",pos_black_left_guard)
+black_left_guard = Chess(root,"士","black",pos_black_left_guard,(0,3))
 
 #黑将
 pos_black_king = list_position[0][4]
-black_king = Chess(root,"将","black",pos_black_king)
+black_king = Chess(root,"将","black",pos_black_king,(0,4))
 
 #右黑士
 pos_black_right_guard = list_position[0][5]
-black_right_guard = Chess(root,"士","black",pos_black_right_guard)
+black_right_guard = Chess(root,"士","black",pos_black_right_guard,(0,5))
 
 #右黑象
 pos_black_right_minister = list_position[0][6]
-black_right_minister = Chess(root,"象","black",pos_black_right_minister)
+black_right_minister = Chess(root,"象","black",pos_black_right_minister,(0,6))
 
 #右黑马
 pos_black_right_knight = list_position[0][7]
-black_right_knight = Chess(root,"馬","black",pos_black_right_knight)
+black_right_knight = Chess(root,"馬","black",pos_black_right_knight,(0,7))
 
 #右黑车
 pos_black_right_rook = list_position[0][8]
-black_right_rook = Chess(root,"車","black",pos_black_right_rook)
+black_right_rook = Chess(root,"車","black",pos_black_right_rook,(0,8))
 
 #左黑炮
 pos_black_left_gun = list_position[2][1]
-black_left_gun = Chess(root,"炮","black",pos_black_left_gun)
+black_left_gun = Chess(root,"炮","black",pos_black_left_gun,(2,1))
 
 #右黑炮
 pos_black_right_gun = list_position[2][7]
-black_right_gun = Chess(root,"炮","black",pos_black_right_gun)
+black_right_gun = Chess(root,"炮","black",pos_black_right_gun,(2,7))
 
 #黑卒１
 pos_black_pawn1 = list_position[3][0]
-black_black_pawn1 = Chess(root,"卒","black",pos_black_pawn1)
+black_black_pawn1 = Chess(root,"卒","black",pos_black_pawn1,(3,0))
 
 #黑卒2
 pos_black_pawn2 = list_position[3][2]
-black_black_pawn2 = Chess(root,"卒","black",pos_black_pawn2)
+black_black_pawn2 = Chess(root,"卒","black",pos_black_pawn2,(3,2))
 
 #黑卒3
 pos_black_pawn3 = list_position[3][4]
-black_black_pawn3 = Chess(root,"卒","black",pos_black_pawn3)
+black_black_pawn3 = Chess(root,"卒","black",pos_black_pawn3,(3,4))
 
 #黑卒4
 pos_black_pawn4 = list_position[3][6]
-black_black_pawn4 = Chess(root,"卒","black",pos_black_pawn4)
+black_black_pawn4 = Chess(root,"卒","black",pos_black_pawn4,(3,6))
 
 #黑卒5
 pos_black_pawn5 = list_position[3][8]
-black_black_pawn5 = Chess(root,"卒","black",pos_black_pawn5)
+black_black_pawn5 = Chess(root,"卒","black",pos_black_pawn5,(3,8))
 
 
 #******************************************
 #红兵１
 pos_red_pawn1 = list_position[6][0]
-black_red_pawn1 = Chess(root,"兵","red",pos_red_pawn1)
+black_red_pawn1 = Chess(root,"兵","red",pos_red_pawn1,(6,0))
 
 #红兵2
 pos_red_pawn2 = list_position[6][2]
-black_red_pawn2 = Chess(root,"兵","red",pos_red_pawn2)
+black_red_pawn2 = Chess(root,"兵","red",pos_red_pawn2,(6,2))
 
 #红兵3
 pos_red_pawn3 = list_position[6][4]
-black_red_pawn3 = Chess(root,"兵","red",pos_red_pawn3)
+black_red_pawn3 = Chess(root,"兵","red",pos_red_pawn3,(6,4))
 
 #红兵4
 pos_red_pawn4 = list_position[6][6]
-black_red_pawn4 = Chess(root,"兵","red",pos_red_pawn4)
+black_red_pawn4 = Chess(root,"兵","red",pos_red_pawn4,(6,6))
 
 #红兵5
 pos_red_pawn5 = list_position[6][8]
-black_red_pawn5 = Chess(root,"兵","red",pos_red_pawn5)
+black_red_pawn5 = Chess(root,"兵","red",pos_red_pawn5,(6,8))
 
 #左红炮
 pos_red_left_gun = list_position[7][1]
-black_red_left_gun = Chess(root,"炮","red",pos_red_left_gun)
+black_red_left_gun = Chess(root,"炮","red",pos_red_left_gun,(7,1))
 
 #右红炮
 pos_red_right_gun = list_position[7][7]
-black_red_right_gun = Chess(root,"炮","red",pos_red_right_gun)
+black_red_right_gun = Chess(root,"炮","red",pos_red_right_gun,(7,7))
 
 #左红车
 pos_red_left_rook = list_position[9][0]
-red_left_rook = Chess(root,"車","red",pos_red_left_rook)
+red_left_rook = Chess(root,"車","red",pos_red_left_rook,(9,0))
 
 #左红马
 pos_red_left_knight = list_position[9][1]
-red_left_knight = Chess(root,"馬","red",pos_red_left_knight)
+red_left_knight = Chess(root,"馬","red",pos_red_left_knight,(9,1))
 
 #左红相
 pos_red_left_minister = list_position[9][2]
-red_left_minister = Chess(root,"相","red",pos_red_left_minister)
+red_left_minister = Chess(root,"相","red",pos_red_left_minister,(9,2))
 
 #左红仕
 pos_red_left_guard = list_position[9][3]
-red_left_guard = Chess(root,"仕","red",pos_red_left_guard)
+red_left_guard = Chess(root,"仕","red",pos_red_left_guard,(9,3))
 
 #红帅
 pos_red_king = list_position[9][4]
-red_king = Chess(root,"帅","red",pos_red_king)
+red_king = Chess(root,"帅","red",pos_red_king,(9,4))
 
 #右红仕
 pos_red_right_guard = list_position[9][5]
-red_right_guard = Chess(root,"仕","red",pos_red_right_guard)
+red_right_guard = Chess(root,"仕","red",pos_red_right_guard,(9,5))
 
 #右红相
 pos_red_right_minister = list_position[9][6]
-red_right_minister = Chess(root,"相","red",pos_red_right_minister)
+red_right_minister = Chess(root,"相","red",pos_red_right_minister,(9,6))
 
 #右红马
 pos_red_right_knight = list_position[9][7]
-red_right_knight = Chess(root,"馬","red",pos_red_right_knight)
+red_right_knight = Chess(root,"馬","red",pos_red_right_knight,(9,7))
 
 #右红车
 pos_red_right_rook = list_position[9][8]
-red_right_rook = Chess(root,"車","red",pos_red_right_rook)
+red_right_rook = Chess(root,"車","red",pos_red_right_rook,(9,8))
 
 
 root.update()
