@@ -25,7 +25,7 @@ click_item = {}
 
 
 class Chess:
-    def __init__(self, root,name,color,pos_in_list,fun_position):
+    def __init__(self, root,name,color,pos_in_list):
         """
 
         :param root: 全局画布
@@ -39,7 +39,6 @@ class Chess:
         self.color = color
         self.position = list_position[pos_in_list[0]][pos_in_list[1]]
         self.pos_in_list = pos_in_list
-        self.fun_position = fun_position
 
         ft = tkFont.Font(family='微软雅黑', size=20, weight=tkFont.BOLD)
         self.btn = Button(root,text=name, bg="#d1b07e",fg=color, font=ft,height = "1",width = "1", command=self.click)
@@ -98,10 +97,7 @@ class Chess:
         获得该棋子可以移动的所有位置
         :return:
         """
-        return self.fun_position(self.name,self.color,self.pos_in_list)
-
-root = Tk(className = "中国象棋")
-root.geometry("800x800")
+        pass
 
 def find_move_location(click_location):
     """
@@ -147,7 +143,7 @@ def remove_data_in_list_chess(old_chess):
             break
 
 
-def showlocation(event):
+def click_chessboard(event):
     """
     棋盘点击事件
     :param event:
@@ -170,117 +166,4 @@ def showlocation(event):
             chess.btn.place(x=move_location[0], y=move_location[1])
             chess.btn['bg'] = "#d1b07e"
             del click_item["data"]
-
-
-#  車      馬         象        士      将     炮    兵/卒
-# rook   knight   minister   guard   king　  gun   Pawn
-#位置都是从画布的左往右pos_in_list
-
-img_gif = PhotoImage(file = 'image/chess.gif')
-label_img = Label(root, image = img_gif)
-label_img.bind("<Button-1>", showlocation)
-label_img.pack()
-
-#左黑车
-black_left_rook = Chess(root,"車","black",(0,0),None)
-
-#左黑马
-black_left_knight = Chess(root,"馬","black",(0,1),None)
-
-#左黑象
-black_left_minister = Chess(root,"象","black",(0,2),None)
-
-#左黑士
-black_left_guard = Chess(root,"士","black",(0,3),None)
-
-#黑将
-black_king = Chess(root,"将","black",(0,4),None)
-
-#右黑士
-black_right_guard = Chess(root,"士","black",(0,5),None)
-
-#右黑象
-black_right_minister = Chess(root,"象","black",(0,6),None)
-
-#右黑马
-black_right_knight = Chess(root,"馬","black",(0,7),None)
-
-#右黑车
-black_right_rook = Chess(root,"車","black",(0,8),None)
-
-#左黑炮
-black_left_gun = Chess(root,"炮","black",(2,1),None)
-
-#右黑炮
-black_right_gun = Chess(root,"炮","black",(2,7),None)
-
-#黑卒１
-black_black_pawn1 = Chess(root,"卒","black",(3,0),None)
-
-#黑卒2
-black_black_pawn2 = Chess(root,"卒","black",(3,2),None)
-
-#黑卒3
-black_black_pawn3 = Chess(root,"卒","black",(3,4),None)
-
-#黑卒4
-black_black_pawn4 = Chess(root,"卒","black",(3,6),None)
-
-#黑卒5
-black_black_pawn5 = Chess(root,"卒","black",(3,8),None)
-
-
-#******************************************
-#红兵１
-black_red_pawn1 = Chess(root,"兵","red",(6,0),None)
-
-#红兵2
-black_red_pawn2 = Chess(root,"兵","red",(6,2),None)
-
-#红兵3
-black_red_pawn3 = Chess(root,"兵","red",(6,4),None)
-
-#红兵4
-black_red_pawn4 = Chess(root,"兵","red",(6,6),None)
-
-#红兵5
-black_red_pawn5 = Chess(root,"兵","red",(6,8),None)
-
-#左红炮
-black_red_left_gun = Chess(root,"炮","red",(7,1),None)
-
-#右红炮
-black_red_right_gun = Chess(root,"炮","red",(7,7),None)
-
-#左红车
-red_left_rook = Chess(root,"車","red",(9,0),None)
-
-#左红马
-red_left_knight = Chess(root,"馬","red",(9,1),None)
-
-#左红相
-red_left_minister = Chess(root,"相","red",(9,2),None)
-
-#左红仕
-red_left_guard = Chess(root,"仕","red",(9,3),None)
-
-#红帅
-red_king = Chess(root,"帅","red",(9,4),None)
-
-#右红仕
-red_right_guard = Chess(root,"仕","red",(9,5),None)
-
-#右红相
-red_right_minister = Chess(root,"相","red",(9,6),None)
-
-#右红马
-red_right_knight = Chess(root,"馬","red",(9,7),None)
-
-#右红车
-red_right_rook = Chess(root,"車","red",(9,8),None)
-
-
-root.update()
-
-root.mainloop()
 
