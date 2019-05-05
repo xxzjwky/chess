@@ -2,6 +2,8 @@ from tkinter import *
 
 import tkinter.font as tkFont
 
+import time
+
 
 #棋盘列表
 list_position = [
@@ -35,6 +37,7 @@ class Chess:
         :param pos_in_list: 该棋子在列表中的位置
         :param fun_position: 该棋子在列表中的位置
         """
+        self.root = root
         self.name = name
         self.color = color
         self.position = list_position[pos_in_list[0]][pos_in_list[1]]
@@ -108,7 +111,7 @@ def find_move_location(click_location):
     for i in range(len(list_position)):
         for j in range(len(list_position[i])):
             chess_one = list_position[i][j]
-            if abs(chess_one[0] - click_location[0])<30 and abs(chess_one[1] - click_location[1])<30:
+            if abs(chess_one[0] - click_location[0])<50 and abs(chess_one[1] - click_location[1])<50:
 
                 #点击的点有子，则不做处理
                 for item in list_chess:
@@ -159,11 +162,25 @@ def click_chessboard(event):
 
         move_location =  find_move_location((event.x, event.y))
 
+        #待移动位置
         if move_location:
-            #更新列表中棋子的新位置
-            refresh_list_chess(chess,move_location)
 
-            chess.btn.place(x=move_location[0], y=move_location[1])
-            chess.btn['bg'] = "#d1b07e"
-            del click_item["data"]
+            #符合移动条件
+            passable_positions =  chess.get_passable_positions()
+            if passable_positions and move_location in passable_positions:
+
+                #更新列表中棋子的新位置
+                refresh_list_chess(chess,move_location)
+
+                chess.btn.place(x=move_location[0], y=move_location[1])
+                chess.btn['bg'] = "#d1b07e"
+                del click_item["data"]
+            else:
+                #显示红色警告后恢复原色
+                bg = chess.btn['bg']
+                chess.btn['bg'] = "#CC66FF"
+                chess.root.update()
+                time.sleep(1)
+                chess.btn['bg'] = bg
+                chess.root.update()
 
