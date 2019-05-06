@@ -60,39 +60,39 @@ black_left_gun = Gun(root,"炮","black",(2,1))
 #右黑炮
 black_right_gun = Gun(root,"炮","black",(2,7))
 #左红炮
-black_red_left_gun = Gun(root,"炮","red",(7,1))
+red_left_gun = Gun(root,"炮","red",(7,1))
 #右红炮
-black_red_right_gun = Gun(root,"炮","red",(7,7))
+red_right_gun = Gun(root,"炮","red",(7,7))
 #***********************************************************
 #黑卒１
-black_black_pawn1 = Pawn(root,"卒","black",(3,0))
+black_pawn1 = Pawn(root,"卒","black",(3,0))
 
 #黑卒2
-black_black_pawn2 = Pawn(root,"卒","black",(3,2))
+black_pawn2 = Pawn(root,"卒","black",(3,2))
 
 #黑卒3
-black_black_pawn3 = Pawn(root,"卒","black",(3,4))
+black_pawn3 = Pawn(root,"卒","black",(3,4))
 
 #黑卒4
-black_black_pawn4 = Pawn(root,"卒","black",(3,6))
+black_pawn4 = Pawn(root,"卒","black",(3,6))
 
 #黑卒5
-black_black_pawn5 = Pawn(root,"卒","black",(3,8))
+black_pawn5 = Pawn(root,"卒","black",(3,8))
 
 #红兵１
-black_red_pawn1 = Pawn(root,"兵","red",(6,0))
+red_pawn1 = Pawn(root,"兵","red",(6,0))
 
 #红兵2
-black_red_pawn2 = Pawn(root,"兵","red",(6,2))
+red_pawn2 = Pawn(root,"兵","red",(6,2))
 
 #红兵3
-black_red_pawn3 = Pawn(root,"兵","red",(6,4))
+red_pawn3 = Pawn(root,"兵","red",(6,4))
 
 #红兵4
-black_red_pawn4 = Pawn(root,"兵","red",(6,6))
+red_pawn4 = Pawn(root,"兵","red",(6,6))
 
 #红兵5
-black_red_pawn5 = Pawn(root,"兵","red",(6,8))
+red_pawn5 = Pawn(root,"兵","red",(6,8))
 
 #******************************************
 
