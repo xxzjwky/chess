@@ -127,6 +127,19 @@ def find_move_location(click_location):
 
                 return chess_one
 
+def find_index(move_location):
+    """
+    找寻位置下标
+    :param move_location:
+    :return:
+    """
+    for i in range(len(list_position)):
+        for j in range(len(list_position[i])):
+            chess_one = list_position[i][j]
+            if chess_one == move_location:
+                return (i,j)
+
+
 def judge_can_move(chess,position):
     """
     判断该位置是否可以移动
@@ -160,6 +173,9 @@ def refresh_list_chess(chess,move_location):
     for item in list_chess:
         if chess.position == item.position:
             chess.position = move_location
+
+            #更新列表中的下标位置
+            chess.pos_in_list = find_index(move_location)
             break
 
 def remove_data_in_list_chess(old_chess):
