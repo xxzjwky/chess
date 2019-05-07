@@ -2,6 +2,8 @@ from tkinter import *
 
 import tkinter.font as tkFont
 
+import time
+
 
 #棋盘列表
 list_position = [
@@ -35,6 +37,7 @@ class Chess:
         :param pos_in_list: 该棋子在列表中的位置
         :param fun_position: 该棋子在列表中的位置
         """
+        self.root = root
         self.name = name
         self.color = color
         self.position = list_position[pos_in_list[0]][pos_in_list[1]]
@@ -67,17 +70,19 @@ class Chess:
                     self.btn['bg'] = "yellow"
                     click_item["data"].btn['bg'] = "#d1b07e"
                     click_item["data"]= self
-            #颜色不同暂时消灭该子
+
+            #颜色不同
             else:
 
-                #更新当前棋子位置
-                refresh_list_chess(click_item["data"],self.position)
+                if judge_can_move(click_item["data"],self.position):
+                    #更新当前棋子位置
+                    refresh_list_chess(click_item["data"],self.position)
 
-                #获得目标子坐标给焦点子
-                click_item["data"].btn['bg'] = "#d1b07e"
-                click_item["data"].btn.place(x=self.position[0], y=self.position[1])
-                del click_item["data"]
-                self.delete()
+                    #获得目标子坐标给焦点子
+                    click_item["data"].btn['bg'] = "#d1b07e"
+                    click_item["data"].btn.place(x=self.position[0], y=self.position[1])
+                    del click_item["data"]
+                    self.delete()
         else:
             # 点击变黄色背景　并且标记
             self.btn['bg'] = "yellow"
@@ -92,12 +97,15 @@ class Chess:
         #删除列表中位置
         remove_data_in_list_chess(self)
 
+
+
     def get_passable_positions(self):
         """
         获得该棋子可以移动的所有位置
         :return:
         """
         pass
+
 
 def find_move_location(click_location):
     """
@@ -108,7 +116,7 @@ def find_move_location(click_location):
     for i in range(len(list_position)):
         for j in range(len(list_position[i])):
             chess_one = list_position[i][j]
-            if abs(chess_one[0] - click_location[0])<30 and abs(chess_one[1] - click_location[1])<30:
+            if abs(chess_one[0] - click_location[0])<50 and abs(chess_one[1] - click_location[1])<50:
 
                 #点击的点有子，则不做处理
                 for item in list_chess:
@@ -118,6 +126,42 @@ def find_move_location(click_location):
                         # break
 
                 return chess_one
+
+def find_index(move_location):
+    """
+    找寻位置下标
+    :param move_location:
+    :return:
+    """
+    for i in range(len(list_position)):
+        for j in range(len(list_position[i])):
+            chess_one = list_position[i][j]
+            if chess_one == move_location:
+                return (i,j)
+
+
+def judge_can_move(chess,position):
+    """
+    判断该位置是否可以移动
+    :param chess:  焦点棋子
+    :param position:　目标位置
+    :return: True 可以移动　　False 不可移动
+    """
+
+    # 符合移动条件
+    passable_positions = chess.get_passable_positions()
+    if passable_positions and position in passable_positions:
+
+        return True
+    else:
+        # 显示红色警告后恢复原色
+        bg = chess.btn['bg']
+        chess.btn['bg'] = "#CC66FF"
+        chess.root.update()
+        time.sleep(1)
+        chess.btn['bg'] = bg
+        chess.root.update()
+        return False
 
 def refresh_list_chess(chess,move_location):
     """
@@ -129,6 +173,9 @@ def refresh_list_chess(chess,move_location):
     for item in list_chess:
         if chess.position == item.position:
             chess.position = move_location
+
+            #更新列表中的下标位置
+            chess.pos_in_list = find_index(move_location)
             break
 
 def remove_data_in_list_chess(old_chess):
@@ -144,6 +191,7 @@ def remove_data_in_list_chess(old_chess):
 
 
 def click_chessboard(event):
+
     """
     棋盘点击事件
     :param event:
@@ -159,11 +207,14 @@ def click_chessboard(event):
 
         move_location =  find_move_location((event.x, event.y))
 
-        if move_location:
+        #待移动位置
+        if move_location and judge_can_move(chess,move_location):
+
             #更新列表中棋子的新位置
             refresh_list_chess(chess,move_location)
 
             chess.btn.place(x=move_location[0], y=move_location[1])
             chess.btn['bg'] = "#d1b07e"
             del click_item["data"]
+
 
