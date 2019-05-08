@@ -95,7 +95,6 @@ red_pawn4 = Pawn(root,"兵","red",(6,6))
 red_pawn5 = Pawn(root,"兵","red",(6,8))
 
 #******************************************
-# r = messagebox.askokcancel('消息框', 'askokcancel')
 
 root.update()
 
