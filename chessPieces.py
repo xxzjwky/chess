@@ -1,5 +1,23 @@
 from chess import *
 
+
+def do_filter(chess_color,passable_positions):
+    """
+    过滤出真正返回位置
+    :param chess_color: 当前棋子颜色
+    :param passable_positions:　前判断可走位置
+    :return:  过滤出真正返回位置
+    """
+
+    for i in range(len(list_chess)):
+        chess_one = list_chess[i]
+        if chess_one.position in passable_positions   and chess_color == chess_one.color:
+            passable_positions.remove(chess_one.position)
+
+    return passable_positions
+
+
+
 class Rook(Chess):
     """
      车
@@ -51,7 +69,7 @@ class Knight(Chess):
                 can_move.append(list_position[x - i][y - 2 * i])
             if x + 1 <= 9:
                 can_move.append(list_position[x + i][y - 2 * i])
-        return can_move
+        return do_filter(self.color,can_move)
 
     def judge_block(self,vector,x,y):
         #向上的判断
@@ -60,8 +78,10 @@ class Knight(Chess):
         #向右的判断
         if vector == "right":
             y += 1
+        #向下的判断
         if vector == "down":
             x += 1
+        #向左的判断
         if vector == "left":
             y -= 1
         for s in list_chess:
@@ -69,6 +89,9 @@ class Knight(Chess):
                 return False
         return True
 
+    def judge_alike_color_chess(self,color,x,y):
+
+        pass
 
 class Minister(Chess):
     """
@@ -79,6 +102,10 @@ class Minister(Chess):
         获得该棋子可以移动的所有位置
         :return:
         """
+        can_move=[]
+        x = self.pos_in_list[0]
+        y = self.pos_in_list[1]
+
         pass
 
 class Guard(Chess):
