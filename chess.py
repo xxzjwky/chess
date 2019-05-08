@@ -75,14 +75,13 @@ class Chess:
             else:
 
                 if judge_can_move(click_item["data"],self.position):
-                    #更新当前棋子位置
+
+                    #首先从列表中删除当前点的子
+                    self.delete()
+
+                    #更新焦点子为当前子的位置
                     refresh_list_chess(click_item["data"],self.position)
 
-                    #获得目标子坐标给焦点子
-                    click_item["data"].btn['bg'] = "#d1b07e"
-                    click_item["data"].btn.place(x=self.position[0], y=self.position[1])
-                    del click_item["data"]
-                    self.delete()
         else:
             # 点击变黄色背景　并且标记
             self.btn['bg'] = "yellow"
@@ -172,11 +171,14 @@ def refresh_list_chess(chess,move_location):
     """
     for item in list_chess:
         if chess.position == item.position:
-            chess.position = move_location
-
-            #更新列表中的下标位置
-            chess.pos_in_list = find_index(move_location)
-            break
+            #更新坐标
+            item.position = move_location
+            #更新列表中的下标位置,并重置原属性
+            item.pos_in_list = find_index(move_location)
+            item.btn['bg'] = "#d1b07e"
+            item.btn.place(x=move_location[0], y=move_location[1])
+            #移除当前焦点
+            del click_item["data"]
 
 def remove_data_in_list_chess(old_chess):
     """
@@ -213,8 +215,5 @@ def click_chessboard(event):
             #更新列表中棋子的新位置
             refresh_list_chess(chess,move_location)
 
-            chess.btn.place(x=move_location[0], y=move_location[1])
-            chess.btn['bg'] = "#d1b07e"
-            del click_item["data"]
 
 

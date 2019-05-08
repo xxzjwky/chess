@@ -24,35 +24,51 @@ class Knight(Chess):
 
         x = self.pos_in_list[0]
         y = self.pos_in_list[1]
-
-        i = 1
         # 一格代表的像素
         # 直接安格子存放，打印时计算像素
+        i = 1
         # 向上的情况
-        if x - 2 >= 0:
+        if x - 2 >= 0 and self.judge_block("up",x,y):
             if y - 1 >= 0:
                 can_move.append(list_position[x - 2 * i][y - i])
-            if y + 1 <= 7:
+            if y + 1 <= 8:
                 can_move.append(list_position[x - 2 * i][y + i])
         # 向右的情况
-        if y + 2 <= 7:
+        if y + 2 <= 8 and self.judge_block("right",x,y):
             if x - 1 >= 0:
                 can_move.append(list_position[(x - i)][y + 2 * i])
-            if x + 1 <= 6:
+            if x + 1 <= 9:
                 can_move.append(list_position[x + i][y + 2 * i])
         # 向下的情况
-        if x + 2 <= 6:
+        if x + 2 <= 9 and self.judge_block("down",x,y):
             if y - 1 >= 0:
                 can_move.append(list_position[x + 2 * i][y - i])
-            if y + 1 <= 7:
+            if y + 1 <= 8:
                 can_move.append(list_position[x + 2 * i][y + i])
         # 向左的情况
-        if y - 2 >= 0:
+        if y - 2 >= 0 and self.judge_block("left",x,y):
             if x - 1 >= 0:
                 can_move.append(list_position[x - i][y - 2 * i])
-            if x + 1 <= 6:
+            if x + 1 <= 9:
                 can_move.append(list_position[x + i][y - 2 * i])
         return can_move
+
+    def judge_block(self,vector,x,y):
+        #向上的判断
+        if vector == "up":
+            x -= 1
+        #向右的判断
+        if vector == "right":
+            y += 1
+        if vector == "down":
+            x += 1
+        if vector == "left":
+            y -= 1
+        for s in list_chess:
+            if x == s.pos_in_list[0] and y == s.pos_in_list[1]:
+                return False
+        return True
+
 
 class Minister(Chess):
     """
