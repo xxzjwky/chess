@@ -90,9 +90,7 @@ class Knight(Chess):
                 return False
         return True
 
-    def judge_alike_color_chess(self,color,x,y):
 
-        pass
 
 class Minister(Chess):
     """
@@ -174,7 +172,33 @@ class Guard(Chess):
         获得该棋子可以移动的所有位置
         :return:
         """
-        pass
+        can_move = []
+        x = self.pos_in_list[0]
+        y = self.pos_in_list[1]
+        if self.color == "red":
+            if x - 1 >= 5:
+                if y - 1 >= 3:
+                    can_move.append(list_position[x - 1][y - 1])
+                if y + 1 <= 5:
+                    can_move.append(list_position[x - 1][y + 1])
+            if x + 1 <= 9:
+                if y - 1 >= 3:
+                    can_move.append(list_position[x + 1][y - 1])
+                if y + 1 <= 5:
+                    can_move.append(list_position[x + 1][y + 1])
+        else:
+            if x - 1 >= 0:
+                if y - 1 >= 3:
+                    can_move.append(list_position[x - 1][y - 1])
+                if y + 1 <= 5:
+                    can_move.append(list_position[x - 1][y + 1])
+            if x + 1 <= 2:
+                if y - 1 >= 3:
+                    can_move.append(list_position[x + 1][y - 1])
+                if y + 1 <= 5:
+                    can_move.append(list_position[x + 1][y + 1])
+        return can_move
+
 
 class King(Chess):
     """
