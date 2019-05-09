@@ -71,6 +71,7 @@ class Knight(Chess):
                 can_move.append(list_position[x + i][y - 2 * i])
         return do_filter(self.color,can_move)
 
+
     def judge_block(self,vector,x,y):
         #向上的判断
         if vector == "up":
@@ -105,9 +106,65 @@ class Minister(Chess):
         can_move=[]
         x = self.pos_in_list[0]
         y = self.pos_in_list[1]
+        if self.color == "red":
+            #象飞上方的判断
+            if x - 2 >= 5:
+                #象飞左上
+                if y - 2 >=0 and self.judge_block("leftup", x, y):
+                    can_move.append(list_position[x-2][y-2])
+                #象飞右上
+                if y + 2 <= 8 and self.judge_block("rightup", x, y):
+                    can_move.append(list_position[x-2][y+2])
+            #象飞下方的判断
+            if x + 2 <= 9:
+                #象飞左下
+                if y - 2 >= 0 and self.judge_block("leftdwon", x, y):
+                    can_move.append(list_position[x+2][y-2])
+                #象飞右下
+                if y + 2 <= 8 and self.judge_block("rightdown", x, y):
+                    can_move.append(list_position[x+2][y+2])
 
-        pass
+        else:
+            # 象飞上方的判断
+            if x - 2 >= 0:
+                # 象飞左上
+                if y - 2 >= 0 and self.judge_block("leftup", x, y):
+                    can_move.append(list_position[x - 2][y - 2])
+                # 象飞右上
+                if y + 2 <= 8 and self.judge_block("rightup", x, y):
+                    can_move.append(list_position[x - 2][y + 2])
+            # 象飞下方的判断
+            if x + 2 <= 4:
+                # 象飞左下
+                if y - 2 >= 0 and self.judge_block("leftdwon", x, y):
+                    can_move.append(list_position[x + 2][y - 2])
+                # 象飞右下
+                if y + 2 <= 8 and self.judge_block("rightdown", x, y):
+                    can_move.append(list_position[x + 2][y + 2])
 
+        return do_filter(self.color, can_move)
+
+    def judge_block(self, vector, x, y):
+        # 向左上的判断
+        if vector == "leftup":
+            x -= 1
+            y += 1
+        # 向右上的判断
+        if vector == "rightup":
+            x -= 1
+            y += 1
+        # 向右下的判断
+        if vector == "rightdown":
+            x += 1
+            y += 1
+        # 向左下的判断
+        if vector == "leftdwon":
+            x += 1
+            y -= 1
+        for s in list_chess:
+            if x == s.pos_in_list[0] and y == s.pos_in_list[1]:
+                return False
+        return True
 class Guard(Chess):
     """
      士
