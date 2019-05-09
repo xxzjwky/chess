@@ -197,7 +197,7 @@ class Guard(Chess):
                     can_move.append(list_position[x + 1][y - 1])
                 if y + 1 <= 5:
                     can_move.append(list_position[x + 1][y + 1])
-        return can_move
+        return do_filter(self.color, can_move)
 
 
 class King(Chess):
