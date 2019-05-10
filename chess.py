@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 import tkinter.font as tkFont
 
@@ -76,11 +77,17 @@ class Chess:
 
                 if judge_can_move(click_item["data"],self.position):
 
+
                     #首先从列表中删除当前点的子
                     self.delete()
 
                     #更新焦点子为当前子的位置
                     refresh_list_chess(click_item["data"],self.position)
+
+                    if self.name == "将":
+                        messagebox.askokcancel('消息框', '你赢了！！！')
+                    elif self.name == "帅":
+                        messagebox.askokcancel('消息框', '你输了！！！')
 
         else:
             # 点击变黄色背景　并且标记

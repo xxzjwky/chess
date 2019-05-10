@@ -96,7 +96,6 @@ red_pawn5 = Pawn(root,"兵","red",(6,8))
 
 #******************************************
 
-
 root.update()
 
 root.mainloop()
