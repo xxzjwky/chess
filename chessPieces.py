@@ -268,4 +268,26 @@ class Pawn(Chess):
         获得该棋子可以移动的所有位置
         :return:
         """
-        pass
+        can_move = []
+        x = self.pos_in_list[0]
+        y = self.pos_in_list[1]
+        if self.color == "red":
+            if x >= 5:
+                can_move.append(list_position[x - 1][y])
+            if x <= 4:
+                can_move.append(list_position[x - 1][y])
+                if y + 1 <= 8:
+                    can_move.append(list_position[x][y + 1])
+                if y - 1 >= 0:
+                    can_move.append(list_position[x][y - 1])
+        else:
+            if x <= 4:
+                can_move.append(list_position[x + 1][y])
+            if x >= 5:
+                can_move.append(list_position[x + 1][y])
+                if y + 1 <= 8:
+                    can_move.append(list_position[x][y + 1])
+                if y - 1 >= 0:
+                    can_move.append(list_position[x][y - 1])
+        return do_filter(self.color, can_move)
+
