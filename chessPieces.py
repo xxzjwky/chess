@@ -456,7 +456,6 @@ class Gun(Chess):
         self.collect_move_positions(can_move, "left")
         self.collect_move_positions(can_move, "right")
 
-        print(can_move)
         return can_move
 
 
