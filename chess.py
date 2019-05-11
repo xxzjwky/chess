@@ -30,7 +30,7 @@ click_item = {}
 
 
 class Chess:
-    def __init__(self, root,name,color,pos_in_list):
+    def __init__(self, root,name,color,pos_in_list,weight):
         """
 
         :param root: 全局画布
@@ -39,12 +39,14 @@ class Chess:
         :param position: 棋子坐标
         :param pos_in_list: 该棋子在列表中的位置
         :param fun_position: 该棋子在列表中的位置
+        :param weight 权重
         """
         self.root = root
         self.name = name
         self.color = color
         self.position = list_position[pos_in_list[0]][pos_in_list[1]]
         self.pos_in_list = pos_in_list
+        self.weight = weight
 
         ft = tkFont.Font(family='微软雅黑', size=20, weight=tkFont.BOLD)
         self.btn = Button(root,text=name, bg="#d1b07e",fg=color, font=ft,height = "1",width = "1", command=self.click)
@@ -123,12 +125,36 @@ class Chess:
         pass
 
 
-    def get_kill_positions(self):
+    def get_edible_chesses(self):
         """
         获得该棋子所有可吃子
         :return:
         """
-        pass
+        passable_positions = self.get_passable_positions()
+        edible_chesses = []
+        for i in range(len(list_chess)):
+            chess_one = list_chess[i]
+            if chess_one.position in passable_positions:
+                edible_chesses.append(chess_one)
+        return edible_chesses
+
+    def get_best_edible_chess(self):
+        """
+        最优可吃子,根据权重判断
+        :return:
+        """
+        edible_chesses = self.get_edible_chesses()
+        best_chess = None
+        for item in edible_chesses:
+
+            if not best_chess:
+                best_chess = item
+                continue
+
+            if best_chess and item.weight > best_chess.weight:
+                best_chess = item
+
+        return best_chess
 
 
 def find_move_location(click_location):
@@ -207,22 +233,60 @@ def refresh_list_chess(chess,move_location):
     if chess.color == "red":
         enable_black_chesses = [item for item in list_chess if item.color == "black" and item.get_passable_positions()]
         if enable_black_chesses:
-            #随机选一个子
-            random_index = random.randint(0,len(enable_black_chesses)-1)
-            random_black_chess = enable_black_chesses[random_index]
-            passable_positions = random_black_chess.get_passable_positions()
-            random_position = passable_positions[random.randint(0,len(passable_positions)-1)]
+
+            choice = choice_best_plan(enable_black_chesses)
+
+            choice_index = choice[0]
+            choice_position = choice[1]
+
+
             #移动位置有子则删除该子
             for item in list_chess:
-                if random_position == item.position:
+                if choice_position == item.position:
                     item.delete()
                     break
 
 
             #更新下标
-            enable_black_chesses[random_index].position = random_position
-            enable_black_chesses[random_index].pos_in_list = find_index(random_position)
-            enable_black_chesses[random_index].btn.place(x=random_position[0], y=random_position[1])
+            enable_black_chesses[choice_index].position = choice_position
+            enable_black_chesses[choice_index].pos_in_list = find_index(choice_position)
+            enable_black_chesses[choice_index].btn.place(x=choice_position[0], y=choice_position[1])
+
+def choice_best_plan(list_possible):
+    """
+    从列表中寻找最优走法
+    :param list_possible: 可走列表
+    :return:
+    """
+
+    best_index = None
+    best_choice = None
+
+    for i in range(len(list_possible)):
+        item = list_possible[i]
+        best_edible_chess =item.get_best_edible_chess()
+        if best_edible_chess:
+            if not best_choice:
+                best_choice = best_edible_chess
+                best_index = i
+            elif best_edible_chess.weight > best_choice.weight:
+                best_choice = best_edible_chess
+                best_index = i
+
+
+    if best_choice:
+        return (best_index,best_choice.position)
+    else:
+        # 随机选一个子,和一个随机位置
+        random_index = random.randint(0, len(list_possible) - 1)
+        random_chess = list_possible[random_index]
+        passable_positions = random_chess.get_passable_positions()
+        random_position = passable_positions[random.randint(0, len(passable_positions) - 1)]
+        return (random_index,random_position)
+
+
+
+
 
 def remove_data_in_list_chess(old_chess):
     """
