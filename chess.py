@@ -5,6 +5,8 @@ import tkinter.font as tkFont
 
 import time
 
+import random
+
 
 #棋盘列表
 list_position = [
@@ -77,19 +79,27 @@ class Chess:
 
                 if judge_can_move(click_item["data"],self.position):
 
-
                     #首先从列表中删除当前点的子
                     self.delete()
-
-                    #更新焦点子为当前子的位置
-                    refresh_list_chess(click_item["data"],self.position)
 
                     if self.name == "将":
                         messagebox.askokcancel('消息框', '你赢了！！！')
                     elif self.name == "帅":
                         messagebox.askokcancel('消息框', '你输了！！！')
+                    else:
+                        #更新焦点子为当前子的位置
+                        refresh_list_chess(click_item["data"],self.position)
+
+
+
 
         else:
+
+            #黑色为自动走子,不允许点黑色子
+            if self.color == "black":
+                return
+
+
             # 点击变黄色背景　并且标记
             self.btn['bg'] = "yellow"
             click_item["data"] = self
@@ -128,8 +138,6 @@ def find_move_location(click_location):
                 for item in list_chess:
                     if chess_one == item.position:
                         return None
-                        # item.delete()
-                        # break
 
                 return chess_one
 
@@ -186,6 +194,27 @@ def refresh_list_chess(chess,move_location):
             item.btn.place(x=move_location[0], y=move_location[1])
             #移除当前焦点
             del click_item["data"]
+
+    #行动的是红子，则下一步黑子行动
+    if chess.color == "red":
+        enable_black_chesses = [item for item in list_chess if item.color == "black" and item.get_passable_positions()]
+        if enable_black_chesses:
+            #随机选一个子
+            random_index = random.randint(0,len(enable_black_chesses)-1)
+            random_black_chess = enable_black_chesses[random_index]
+            passable_positions = random_black_chess.get_passable_positions()
+            random_position = passable_positions[random.randint(0,len(passable_positions)-1)]
+            #移动位置有子则删除该子
+            for item in list_chess:
+                if random_position == item.position:
+                    item.delete()
+                    break
+
+
+            #更新下标
+            enable_black_chesses[random_index].position = random_position
+            enable_black_chesses[random_index].pos_in_list = find_index(random_position)
+            enable_black_chesses[random_index].btn.place(x=random_position[0], y=random_position[1])
 
 def remove_data_in_list_chess(old_chess):
     """
