@@ -123,6 +123,14 @@ class Chess:
         pass
 
 
+    def get_kill_positions(self):
+        """
+        获得该棋子所有可吃子
+        :return:
+        """
+        pass
+
+
 def find_move_location(click_location):
     """
     找寻具体移动位置
