@@ -7,6 +7,8 @@ import time
 
 import random
 
+import copy
+
 
 #棋盘列表
 list_position = [
@@ -117,7 +119,7 @@ class Chess:
 
 
 
-    def get_passable_positions(self):
+    def get_passable_positions(self,list_chesses):
         """
         获得该棋子可以移动的所有位置
         :return:
@@ -130,7 +132,7 @@ class Chess:
         获得该棋子所有可吃子
         :return:
         """
-        passable_positions = self.get_passable_positions()
+        passable_positions = self.get_passable_positions(list_chess)
         edible_chesses = []
         for i in range(len(list_chess)):
             chess_one = list_chess[i]
@@ -187,6 +189,53 @@ def find_index(move_location):
             if chess_one == move_location:
                 return (i,j)
 
+def warn(chess):
+    # 显示红色警告后恢复原色
+    bg = chess.btn['bg']
+    chess.btn['bg'] = "#CC66FF"
+    chess.root.update()
+    time.sleep(1)
+    chess.btn['bg'] = bg
+    chess.root.update()
+
+def judge_king(chess,position):
+    copy_list_chess = list_chess.copy()
+
+    # 王位
+    king_position = None
+
+    #还原位置
+    postion_back = None
+
+    for item in copy_list_chess:
+        if item.position == position:
+            copy_list_chess.remove(item)
+        elif item.position == chess.position:
+            postion_back = item.position
+            # 更新坐标
+            item.position = position
+            # 更新列表中的下标位置,并重置原属性
+            item.pos_in_list = find_index(position)
+
+        if chess.color == "black" and item.color == "black" and item.name == "将":
+            king_position = item.position
+        elif chess.color == "red" and item.color == "red" and item.name == "帅":
+            king_position = item.position
+
+    for item in [one for one in copy_list_chess if one.color != chess.color]:
+        if king_position in item.get_passable_positions(copy_list_chess):
+            warn(chess)
+            #位置还原
+            chess.position = postion_back
+            chess.pos_in_list = find_index(postion_back)
+
+            return False
+
+    # 位置还原
+    chess.position = postion_back
+    chess.pos_in_list = find_index(postion_back)
+    return True
+
 
 def judge_can_move(chess,position):
     """
@@ -197,18 +246,13 @@ def judge_can_move(chess,position):
     """
 
     # 符合移动条件
-    passable_positions = chess.get_passable_positions()
+    passable_positions = chess.get_passable_positions(list_chess)
     if passable_positions and position in passable_positions:
 
-        return True
+        return judge_king(chess,position)
+
     else:
-        # 显示红色警告后恢复原色
-        bg = chess.btn['bg']
-        chess.btn['bg'] = "#CC66FF"
-        chess.root.update()
-        time.sleep(1)
-        chess.btn['bg'] = bg
-        chess.root.update()
+        warn(chess)
         return False
 
 def refresh_list_chess(chess,move_location):
@@ -231,14 +275,13 @@ def refresh_list_chess(chess,move_location):
 
     #行动的是红子，则下一步黑子行动
     if chess.color == "red":
-        enable_black_chesses = [item for item in list_chess if item.color == "black" and item.get_passable_positions()]
+        enable_black_chesses = [item for item in list_chess if item.color == "black" and item.get_passable_positions(list_chess)]
         if enable_black_chesses:
 
             choice = choice_best_plan(enable_black_chesses)
 
             choice_index = choice[0]
             choice_position = choice[1]
-
 
             #移动位置有子则删除该子
             for item in list_chess:
@@ -251,6 +294,8 @@ def refresh_list_chess(chess,move_location):
             enable_black_chesses[choice_index].position = choice_position
             enable_black_chesses[choice_index].pos_in_list = find_index(choice_position)
             enable_black_chesses[choice_index].btn.place(x=choice_position[0], y=choice_position[1])
+
+
 
 def choice_best_plan(list_possible):
     """
@@ -280,7 +325,7 @@ def choice_best_plan(list_possible):
         # 随机选一个子,和一个随机位置
         random_index = random.randint(0, len(list_possible) - 1)
         random_chess = list_possible[random_index]
-        passable_positions = random_chess.get_passable_positions()
+        passable_positions = random_chess.get_passable_positions(list_chess)
         random_position = passable_positions[random.randint(0, len(passable_positions) - 1)]
         return (random_index,random_position)
 
