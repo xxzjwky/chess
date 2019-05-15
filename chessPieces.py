@@ -303,6 +303,7 @@ class King(Chess):
      将
     """
 
+
     def get_passable_positions(self,list_chesses):
         """
         获得该棋子可以移动的所有位置
@@ -311,6 +312,33 @@ class King(Chess):
         can_move = []
         x = self.pos_in_list[0]
         y = self.pos_in_list[1]
+
+        bond_chess = None
+
+        # 找出该列所有的子
+        list_line_chess = []
+        for item in list_chesses:
+            if self.color == "black":
+                if item.pos_in_list[1] == self.pos_in_list[1] and item.pos_in_list[0] != self.pos_in_list[0] and item.pos_in_list[0] > self.pos_in_list[0]:
+                    list_line_chess.append(item)
+            elif self.color == "red":
+                if item.pos_in_list[1] == self.pos_in_list[1] and item.pos_in_list[0] != self.pos_in_list[0] and item.pos_in_list[0] < self.pos_in_list[0]:
+                    list_line_chess.append(item)
+
+        # 排序有子列表
+        if len(list_line_chess) >= 1:
+            for r in range(len(list_line_chess) - 1):
+                for c in range(r + 1, len(list_line_chess)):
+                    if self.color == "red":
+                        if list_line_chess[r].pos_in_list[0] < list_line_chess[c].pos_in_list[0]:
+                            list_line_chess[r], list_line_chess[c] = list_line_chess[c], list_line_chess[r]
+                    elif self.color == "black":
+                        if list_line_chess[r].pos_in_list[0] > list_line_chess[c].pos_in_list[0]:
+                            list_line_chess[r], list_line_chess[c] = list_line_chess[c], list_line_chess[r]
+
+            # 找出第一个子
+            bond_chess = list_line_chess[0]
+
         if self.color == "red":
             # 向上的判断
             if x - 1 >= 7:
@@ -324,6 +352,11 @@ class King(Chess):
             # 向左的判断
             if y - 1 >= 3:
                 can_move.append(list_position[x][y - 1])
+
+            # 判断最小边界子的名称
+            if bond_chess and bond_chess.name == "将":
+                can_move.append(list_position[bond_chess.pos_in_list[0]][bond_chess.pos_in_list[1]])
+
         else:
             # 向上的判断
             if x - 1 >= 0:
@@ -337,6 +370,12 @@ class King(Chess):
             # 向左的判断
             if y - 1 >= 3:
                 can_move.append(list_position[x][y - 1])
+
+
+            # 判断最大边界子的名称
+            if bond_chess and bond_chess.name == "帅":
+                can_move.append(list_position[bond_chess.pos_in_list[0]][bond_chess.pos_in_list[1]])
+
         return do_filter(self.color, can_move,list_chesses)
 
 
