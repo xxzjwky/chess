@@ -7,9 +7,6 @@ import time
 
 import random
 
-import copy
-
-
 #棋盘列表
 list_position = [
     [(62,25), (140,25), (220,25), (300,25), (379,25), (459,25), (538,25), (617,25), (695,25)],
@@ -275,25 +272,98 @@ def refresh_list_chess(chess,move_location):
 
     #行动的是红子，则下一步黑子行动
     if chess.color == "red":
-        enable_black_chesses = [item for item in list_chess if item.color == "black" and item.get_passable_positions(list_chess)]
-        if enable_black_chesses:
 
-            choice = choice_best_plan(enable_black_chesses)
+        #黑将位置
+        list_black_king = [item for item in list_chess if
+                                item.color == "black" and item.name=="将"]
+        #红子可走
+        enable_red_chesses = [item for item in list_chess if
+                                item.color == "red" and item.get_passable_positions(list_chess)]
 
-            choice_index = choice[0]
-            choice_position = choice[1]
+        #判断这会黑子是否处于被将军状态
+        bool_call_the_general = False
 
-            #移动位置有子则删除该子
-            for item in list_chess:
-                if choice_position == item.position:
-                    item.delete()
-                    break
+        #无黑将则提示红方胜利
+        if not list_black_king:
+            messagebox.askokcancel('消息框', '你赢了！！！')
+            return
+
+        #判断被将军
+        for item in enable_red_chesses:
+            if list_black_king[0].position in item.get_passable_positions(list_chess):
+                bool_call_the_general = True
+                break
+
+        enable_black_chesses = [item for item in list_chess if
+                                    item.color == "black" and item.get_passable_positions(list_chess)]
+
+        #如果被将军，则遍历可走子位置
+        if bool_call_the_general:
+            #循环找解将的方法,如果循环完毕没解决则判定红方胜
+            #寻找目标位置
+            # 随机走一步不被将军的位置
+
+            result_item = None
+            result_position = None
+
+            for item in enable_black_chesses:
+                passable_positions = item.get_passable_positions(list_chess)
+                for pos in passable_positions:
+                    if judge_king(item,pos):
+                        result_item = item
+                        result_position = pos
+                        break
+                else:
+                    continue
+
+                break
+
+            #无子可走
+            if not result_item:
+                messagebox.askokcancel('消息框', '你赢了！！！')
+                return
+            else:
+                # 移动位置有子则删除该子
+                for item in list_chess:
+                    if result_position == item.position:
+                        item.delete()
+                        break
+
+                # 更新下标
+                result_item.position = result_position
+                result_item.pos_in_list = find_index(result_position)
+                result_item.btn.place(x=result_position[0], y=result_position[1])
 
 
-            #更新下标
-            enable_black_chesses[choice_index].position = choice_position
-            enable_black_chesses[choice_index].pos_in_list = find_index(choice_position)
-            enable_black_chesses[choice_index].btn.place(x=choice_position[0], y=choice_position[1])
+        else:
+
+            if enable_black_chesses:
+
+                choice_index = None
+                choice_position = None
+
+                #直到找到一种不被将军的走法
+                while True:
+                    choice = choice_best_plan(enable_black_chesses)
+                    choice_index = choice[0]
+                    choice_position = choice[1]
+                    if judge_king(enable_black_chesses[choice_index],choice_position):
+                        break
+
+                # 移动位置有子则删除该子
+                for item in list_chess:
+                    if choice_position == item.position:
+                        item.delete()
+                        break
+
+                # 更新下标
+                enable_black_chesses[choice_index].position = choice_position
+                enable_black_chesses[choice_index].pos_in_list = find_index(choice_position)
+                enable_black_chesses[choice_index].btn.place(x=choice_position[0], y=choice_position[1])
+
+
+
+
 
 
 
