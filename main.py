@@ -10,6 +10,8 @@ import random
 
 import time
 
+import copy
+
 
 #象棋列表
 list_chess = []
@@ -74,19 +76,16 @@ def judge_king(chess,position):
     :param position:
     :return:
     """
-    copy_list_chess = list_chess.copy()
+    copy_list_chess = copy.deepcopy(list_chess)
 
     # 王位
     king_position = None
 
-    #还原位置
-    postion_back = None
 
     for item in copy_list_chess:
         if item.position == position:
             copy_list_chess.remove(item)
         elif item.position == chess.position:
-            postion_back = item.position
             # 更新坐标
             item.position = position
             # 更新列表中的下标位置,并重置原属性
@@ -100,15 +99,8 @@ def judge_king(chess,position):
     for item in [one for one in copy_list_chess if one.color != chess.color]:
         if king_position in item.get_passable_positions(copy_list_chess):
             warn(chess)
-            #位置还原
-            chess.position = postion_back
-            chess.pos_in_list = find_index(postion_back)
-
             return False
 
-    # 位置还原
-    chess.position = postion_back
-    chess.pos_in_list = find_index(postion_back)
     return True
 
 
