@@ -17,6 +17,9 @@ list_chess = []
 #当前点击的棋子
 click_item = {}
 
+#象棋chessBtn字典
+dict_chessBtn = {}
+
 
 
 def find_move_location(click_location):
@@ -405,156 +408,159 @@ def init_btn(chess):
     :return:
     """
     ft = tkFont.Font(family='微软雅黑', size=20, weight=tkFont.BOLD)
-    chess.btn = Button(root, text=chess.name, bg="#d1b07e", fg=chess.color, font=ft,
+    btn = Button(root, text=chess.name, bg="#d1b07e", fg=chess.color, font=ft,
                                  height="1", width="1", command=lambda : click(chess))
-    chess.btn.pack()
-    chess.btn.place(x=chess.position[0], y=chess.position[1])
+    btn.pack()
+    btn.place(x=chess.position[0], y=chess.position[1])
+
+    chess.btn = btn
 
     # 添加到象棋列表
     list_chess.append(chess)
+    dict_chessBtn[chess.id] = btn
 
 
 #***********************************************************
 #左黑车
-black_left_rook = Rook("車","black",(0,0),100)
+black_left_rook = Rook("black_left_rook","車","black",(0,0),100)
 init_btn(black_left_rook)
 
 #右黑车
-black_right_rook = Rook("車","black",(0,8),100)
+black_right_rook = Rook("black_right_rook","車","black",(0,8),100)
 init_btn(black_right_rook)
 
 #左红车
-red_left_rook = Rook("車","red",(9,0),100)
+red_left_rook = Rook("red_left_rook","車","red",(9,0),100)
 init_btn(red_left_rook)
 
 #右红车
-red_right_rook = Rook("車","red",(9,8),100)
+red_right_rook = Rook("red_right_rook","車","red",(9,8),100)
 init_btn(red_right_rook)
 
 #***********************************************************
 #左黑马
-black_left_knight = Knight("馬","black",(0,1),80)
+black_left_knight = Knight("black_left_knight","馬","black",(0,1),80)
 init_btn(black_left_knight)
 
 #右黑马
-black_right_knight = Knight("馬","black",(0,7),80)
+black_right_knight = Knight("black_right_knight","馬","black",(0,7),80)
 init_btn(black_right_knight)
 
 #左红马
-red_left_knight = Knight("馬","red",(9,1),80)
+red_left_knight = Knight("red_left_knight","馬","red",(9,1),80)
 init_btn(red_left_knight)
 
 #右红马
-red_right_knight = Knight("馬","red",(9,7),80)
+red_right_knight = Knight("red_right_knight","馬","red",(9,7),80)
 init_btn(red_right_knight)
 
 
 #***********************************************************
 #左黑象
-black_left_minister = Minister("象","black",(0,2),30)
+black_left_minister = Minister("black_left_minister","象","black",(0,2),30)
 init_btn(black_left_minister)
 
 #右黑象
-black_right_minister = Minister("象","black",(0,6),30)
+black_right_minister = Minister("black_right_minister","象","black",(0,6),30)
 init_btn(black_right_minister)
 
 #左红相
-red_left_minister = Minister("相","red",(9,2),30)
+red_left_minister = Minister("red_left_minister","相","red",(9,2),30)
 init_btn(red_left_minister)
 
 #右红相
-red_right_minister = Minister("相","red",(9,6),30)
+red_right_minister = Minister("red_right_minister","相","red",(9,6),30)
 init_btn(red_right_minister)
 
 
 #***********************************************************
 #左黑士
-black_left_guard = Guard("士","black",(0,3),40)
+black_left_guard = Guard("black_left_guard","士","black",(0,3),40)
 init_btn(black_left_guard)
 
 #右黑士
-black_right_guard = Guard("士","black",(0,5),40)
+black_right_guard = Guard("black_right_guard","士","black",(0,5),40)
 init_btn(black_right_guard)
 
 
 #左红仕
-red_left_guard = Guard("仕","red",(9,3),40)
+red_left_guard = Guard("red_left_guard","仕","red",(9,3),40)
 init_btn(red_left_guard)
 
 
 #右红仕
-red_right_guard = Guard ("仕","red",(9,5),40)
+red_right_guard = Guard ("red_right_guard","仕","red",(9,5),40)
 init_btn(red_right_guard)
 
 
 #***********************************************************
 #黑将
-black_king = King("将","black",(0,4),200)
+black_king = King("black_king","将","black",(0,4),200)
 init_btn(black_king)
 
 
 #红帅
-red_king = King("帅","red",(9,4),200)
+red_king = King("red_king","帅","red",(9,4),200)
 init_btn(red_king)
 
 
 #***********************************************************
 #左黑炮
-black_left_gun = Gun("炮","black",(2,1),90)
+black_left_gun = Gun("black_left_gun","炮","black",(2,1),90)
 init_btn(black_left_gun)
 
 #右黑炮
-black_right_gun = Gun("炮","black",(2,7),90)
+black_right_gun = Gun("black_right_gun","炮","black",(2,7),90)
 init_btn(black_right_gun)
 
 #左红炮
-red_left_gun = Gun("炮","red",(7,1),90)
+red_left_gun = Gun("red_left_gun","炮","red",(7,1),90)
 init_btn(red_left_gun)
 
 
 #右红炮
-red_right_gun = Gun("炮","red",(7,7),90)
+red_right_gun = Gun("red_right_gun","炮","red",(7,7),90)
 init_btn(red_right_gun)
 
 #***********************************************************
 #黑卒１
-black_pawn1 = Pawn("卒","black",(3,0),1)
+black_pawn1 = Pawn("black_pawn1","卒","black",(3,0),1)
 init_btn(black_pawn1)
 
 #黑卒2
-black_pawn2 = Pawn("卒","black",(3,2),1)
+black_pawn2 = Pawn("black_pawn2","卒","black",(3,2),1)
 init_btn(black_pawn2)
 
 #黑卒3
-black_pawn3 = Pawn("卒","black",(3,4),1)
+black_pawn3 = Pawn("black_pawn3","卒","black",(3,4),1)
 init_btn(black_pawn3)
 
 #黑卒4
-black_pawn4 = Pawn("卒","black",(3,6),1)
+black_pawn4 = Pawn("black_pawn4","卒","black",(3,6),1)
 init_btn(black_pawn4)
 
 #黑卒5
-black_pawn5 = Pawn("卒","black",(3,8),1)
+black_pawn5 = Pawn("black_pawn5","卒","black",(3,8),1)
 init_btn(black_pawn5)
 
 #红兵１
-red_pawn1 = Pawn("兵","red",(6,0),1)
+red_pawn1 = Pawn("red_pawn1","兵","red",(6,0),1)
 init_btn(red_pawn1)
 
 #红兵2
-red_pawn2 = Pawn("兵","red",(6,2),1)
+red_pawn2 = Pawn("red_pawn2","兵","red",(6,2),1)
 init_btn(red_pawn2)
 
 #红兵3
-red_pawn3 = Pawn("兵","red",(6,4),1)
+red_pawn3 = Pawn("red_pawn3","兵","red",(6,4),1)
 init_btn(red_pawn3)
 
 #红兵4
-red_pawn4 = Pawn("兵","red",(6,6),1)
+red_pawn4 = Pawn("red_pawn4","兵","red",(6,6),1)
 init_btn(red_pawn4)
 
 #红兵5
-red_pawn5 = Pawn("兵","red",(6,8),1)
+red_pawn5 = Pawn("red_pawn5","兵","red",(6,8),1)
 init_btn(red_pawn5)
 
 #******************************************

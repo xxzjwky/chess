@@ -14,8 +14,9 @@ list_position = [
 
 
 class Chess:
-    def __init__(self,name,color,pos_in_list,weight):
+    def __init__(self,id,name,color,pos_in_list,weight):
         """
+        :param id: id唯一标识
         :param name: 棋子名称
         :param color: 棋子颜色
         :param position: 棋子坐标
@@ -23,6 +24,7 @@ class Chess:
         :param fun_position: 该棋子在列表中的位置
         :param weight 权重
         """
+        self.id = id
         self.name = name
         self.color = color
         self.position = list_position[pos_in_list[0]][pos_in_list[1]]
