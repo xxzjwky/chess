@@ -46,11 +46,13 @@ def warn(chess):
     :param chess:
     :return:
     """
-    bg = chess.btn['bg']
-    chess.btn['bg'] = "#CC66FF"
+    chess_btn = dict_chessBtn[chess.id]
+    bg = chess_btn['bg']
+    chess_btn['bg'] = "#CC66FF"
     root.update()
     time.sleep(1)
-    chess.btn['bg'] = bg
+    chess_btn['bg'] = bg
+    dict_chessBtn[chess.id] = chess_btn
     root.update()
 
 def find_index(move_location):
@@ -177,7 +179,10 @@ def delete(chess):
     删除控件
     :return:
     """
-    chess.btn.place_forget()
+    #清除棋子按钮
+    dict_chessBtn[chess.id].place_forget()
+    del dict_chessBtn[chess.id]
+
     # 删除列表中位置
     remove_data_in_list_chess(chess)
 
@@ -252,8 +257,8 @@ def refresh_list_chess(chess,move_location):
             item.position = move_location
             #更新列表中的下标位置,并重置原属性
             item.pos_in_list = find_index(move_location)
-            item.btn['bg'] = "#d1b07e"
-            item.btn.place(x=move_location[0], y=move_location[1])
+            dict_chessBtn[item.id]['bg'] = "#d1b07e"
+            dict_chessBtn[item.id].place(x=move_location[0], y=move_location[1])
             #移除当前焦点
             del click_item["data"]
 
@@ -319,7 +324,7 @@ def refresh_list_chess(chess,move_location):
                 # 更新下标
                 result_item.position = result_position
                 result_item.pos_in_list = find_index(result_position)
-                result_item.btn.place(x=result_position[0], y=result_position[1])
+                dict_chessBtn[result_item.id].place(x=result_position[0], y=result_position[1])
 
 
         else:
@@ -346,7 +351,8 @@ def refresh_list_chess(chess,move_location):
                 # 更新下标
                 enable_black_chesses[choice_index].position = choice_position
                 enable_black_chesses[choice_index].pos_in_list = find_index(choice_position)
-                enable_black_chesses[choice_index].btn.place(x=choice_position[0], y=choice_position[1])
+
+                dict_chessBtn[enable_black_chesses[choice_index].id].place(x=choice_position[0], y=choice_position[1])
 
 
 def click(chess):
@@ -361,16 +367,16 @@ def click(chess):
 
             # 该次点击和上次点击相同
             if click_item["data"].position == chess.position:
-                if click_item["data"].btn["bg"] == "yellow":
-                    click_item["data"].btn['bg'] = "#d1b07e"
+                if dict_chessBtn[click_item["data"].id]["bg"] == "yellow":
+                    dict_chessBtn[click_item["data"].id]["bg"] = "#d1b07e"
                     del click_item["data"]
                 else:
-                    click_item["data"].btn['bg'] = "yellow"
+                    dict_chessBtn[click_item["data"].id]["bg"] = "yellow"
                     click_item["data"] = chess
 
             else:  # 点击变黄色背景　并且标记
-                chess.btn['bg'] = "yellow"
-                click_item["data"].btn['bg'] = "#d1b07e"
+                dict_chessBtn[chess.id]["bg"] = "yellow"
+                dict_chessBtn[click_item["data"].id]["bg"] = "#d1b07e"
                 click_item["data"] = chess
 
         # 颜色不同
@@ -397,7 +403,7 @@ def click(chess):
             return
 
         # 点击变黄色背景　并且标记
-        chess.btn['bg'] = "yellow"
+        dict_chessBtn[chess.id]["bg"] = "yellow"
         click_item["data"] = chess
 
 
@@ -413,7 +419,6 @@ def init_btn(chess):
     btn.pack()
     btn.place(x=chess.position[0], y=chess.position[1])
 
-    chess.btn = btn
 
     # 添加到象棋列表
     list_chess.append(chess)
