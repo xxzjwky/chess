@@ -187,7 +187,8 @@ def get_best_edible_chess(chess):
     edible_chesses = []
     for i in range(len(list_chess)):
         chess_one = list_chess[i]
-        if chess_one.position in passable_positions:
+        #可吃并且不被将军
+        if chess_one.position in passable_positions and judge_king(chess,chess_one.position):
             edible_chesses.append(chess_one)
 
     best_chess = None
