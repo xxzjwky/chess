@@ -258,6 +258,9 @@ def refresh_list_chess(chess,move_location):
     #行动的是红子，则下一步黑子行动
     if chess.color == "red":
 
+        #暂缓一秒再行动
+        time.sleep(1)
+
         #黑将位置
         list_black_king = [item for item in list_chess if
                                 item.color == "black" and item.name=="将"]
