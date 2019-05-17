@@ -98,7 +98,6 @@ def judge_king(chess,position):
 
     for item in [one for one in copy_list_chess if one.color != chess.color]:
         if king_position in item.get_passable_positions(copy_list_chess):
-            warn(chess)
             return False
 
     return True
@@ -116,7 +115,11 @@ def judge_can_move(chess,position):
     passable_positions = chess.get_passable_positions(list_chess)
     if passable_positions and position in passable_positions:
 
-        return judge_king(chess,position)
+        if judge_king(chess,position):
+            return True
+        else:
+            warn(chess)
+            return False
 
     else:
         warn(chess)
@@ -257,9 +260,6 @@ def refresh_list_chess(chess,move_location):
 
     #行动的是红子，则下一步黑子行动
     if chess.color == "red":
-
-        #暂缓一秒再行动
-        time.sleep(1)
 
         #黑将位置
         list_black_king = [item for item in list_chess if
