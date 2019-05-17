@@ -133,7 +133,6 @@ def click_chessboard(event):
     :param event:
     :return:
     """
-
     if click_item:
         #移动棋子
         chess = click_item["data"]
@@ -422,6 +421,23 @@ def init_btn(chess):
 
 
 #***********************************************************
+#重新开始
+def restart():
+    list_chess.clear()
+    click_item.clear()
+    for item in dict_chessBtn.values():
+        item.place_forget()
+    dict_chessBtn.clear()
+    for item in copy_list:
+        init_btn(item)
+    root.update()
+
+ft = tkFont.Font(family='微软雅黑', size=12, weight=tkFont.BOLD)
+btn_restart = Button(root, text="重新开始", bg="#d1b07e", fg="red", font=ft,
+                                 height="1", width="4", command=restart)
+btn_restart.pack()
+btn_restart.place(x=735, y=430)
+
 #左黑车
 black_left_rook = Rook("black_left_rook","車","black",(0,0),100)
 init_btn(black_left_rook)
@@ -569,6 +585,6 @@ init_btn(red_pawn5)
 
 
 root.update()
-
+copy_list = copy.deepcopy(list_chess)
 root.mainloop()
 

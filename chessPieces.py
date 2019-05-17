@@ -515,7 +515,8 @@ class Pawn(Chess):
             if x >= 5:
                 can_move.append(list_position[x - 1][y])
             if x <= 4:
-                can_move.append(list_position[x - 1][y])
+                if x - 1 >=0:
+                    can_move.append(list_position[x - 1][y])
                 if y + 1 <= 8:
                     can_move.append(list_position[x][y + 1])
                 if y - 1 >= 0:
@@ -524,7 +525,8 @@ class Pawn(Chess):
             if x <= 4:
                 can_move.append(list_position[x + 1][y])
             if x >= 5:
-                can_move.append(list_position[x + 1][y])
+                if x +1 <=9:
+                    can_move.append(list_position[x + 1][y])
                 if y + 1 <= 8:
                     can_move.append(list_position[x][y + 1])
                 if y - 1 >= 0:
