@@ -150,7 +150,7 @@ def click_chessboard(event):
 
             # 保存走子状态
             copy_list_chess.append(copy.deepcopy(list_chess))
-            print(1)
+
 
 
 
@@ -403,7 +403,6 @@ def click(chess):
                     # 保存走子状态
                     copy_list_chess.append(copy.deepcopy(list_chess))
 
-                    print(1)
 
 
     else:
@@ -427,6 +426,7 @@ def init_btn(chess):
     btn = Button(root, text=chess.name, bg="#d1b07e", fg=chess.color, font=ft,
                                  height="1", width="1", command=lambda : click(chess))
     btn.pack()
+
     btn.place(x=chess.position[0], y=chess.position[1])
 
 
@@ -445,6 +445,9 @@ def reset(list_temp):
     dict_chessBtn.clear()
     for item in list_temp:
         init_btn(item)
+
+    if  len(copy_list_chess) <= 1:
+        copy_list_chess[0] = copy.deepcopy(list_chess)
     root.update()
 
 #重新开始
@@ -463,6 +466,9 @@ btn_restart.place(x=735, y=430)
 
 #悔棋
 def regret_game():
+    if len(copy_list_chess) <= 1:
+        return
+
     if len(copy_list_chess) > 1:
         copy_list_chess.pop()
     list_temp = copy_list_chess[-1]
@@ -620,5 +626,8 @@ init_btn(red_pawn5)
 
 
 root.update()
+
+rest_list = copy.deepcopy(list_chess)
+
 copy_list_chess.append(copy.deepcopy(list_chess))
 root.mainloop()
