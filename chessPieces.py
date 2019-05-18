@@ -426,7 +426,7 @@ class Gun(Chess):
             if bond_chess:
                 position_bound = bond_chess.pos_in_list[0]
             else:
-                position_bound = 0
+                position_bound = -1
         elif vector == "down":
             if bond_chess:
                 position_bound = bond_chess.pos_in_list[0]
@@ -437,7 +437,7 @@ class Gun(Chess):
             if bond_chess:
                 position_bound = bond_chess.pos_in_list[1]
             else:
-                position_bound = 0
+                position_bound = -1
         elif vector == "right":
             if bond_chess:
                 position_bound = bond_chess.pos_in_list[1]
