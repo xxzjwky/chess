@@ -454,7 +454,6 @@ def reset(list_temp):
 def restart():
     list_temp = copy_list_chess[0]
     copy_list_chess.clear()
-    copy_list_chess.append(list_temp)
     reset(list_temp)
 
 
@@ -626,8 +625,5 @@ init_btn(red_pawn5)
 
 
 root.update()
-
-rest_list = copy.deepcopy(list_chess)
-
 copy_list_chess.append(copy.deepcopy(list_chess))
 root.mainloop()
