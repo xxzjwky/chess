@@ -16,6 +16,9 @@ import copy
 #象棋列表
 list_chess = []
 
+
+copy_list_chess = []
+
 #当前点击的棋子
 click_item = {}
 
@@ -145,6 +148,10 @@ def click_chessboard(event):
             #更新列表中棋子的新位置
             refresh_list_chess(chess,move_location)
 
+            # 保存走子状态
+            copy_list_chess.append(copy.deepcopy(list_chess))
+            print(1)
+
 
 
 root = Tk(className = "中国象棋")
@@ -257,6 +264,8 @@ def refresh_list_chess(chess,move_location):
             #移除当前焦点
             del click_item["data"]
 
+
+
     #行动的是红子，则下一步黑子行动
     if chess.color == "red":
 
@@ -350,6 +359,7 @@ def refresh_list_chess(chess,move_location):
                 dict_chessBtn[enable_black_chesses[choice_index].id].place(x=choice_position[0], y=choice_position[1])
 
 
+
 def click(chess):
     """
     棋子点击
@@ -390,6 +400,11 @@ def click(chess):
                     # 更新焦点子为当前子的位置
                     refresh_list_chess(click_item["data"], chess.position)
 
+                    # 保存走子状态
+                    copy_list_chess.append(copy.deepcopy(list_chess))
+
+                    print(1)
+
 
     else:
 
@@ -421,16 +436,24 @@ def init_btn(chess):
 
 
 #***********************************************************
-#重新开始
-def restart():
+#重置
+def reset(list_temp):
     list_chess.clear()
     click_item.clear()
     for item in dict_chessBtn.values():
         item.place_forget()
     dict_chessBtn.clear()
-    for item in copy_list:
+    for item in list_temp:
         init_btn(item)
     root.update()
+
+#重新开始
+def restart():
+    list_temp = copy_list_chess[0]
+    copy_list_chess.clear()
+    copy_list_chess.append(list_temp)
+    reset(list_temp)
+
 
 ft = tkFont.Font(family='微软雅黑', size=12, weight=tkFont.BOLD)
 btn_restart = Button(root, text="重新开始", bg="#d1b07e", fg="red", font=ft,
@@ -438,6 +461,18 @@ btn_restart = Button(root, text="重新开始", bg="#d1b07e", fg="red", font=ft,
 btn_restart.pack()
 btn_restart.place(x=735, y=430)
 
+#悔棋
+def regret_game():
+    if len(copy_list_chess) > 1:
+        copy_list_chess.pop()
+    list_temp = copy_list_chess[-1]
+    reset(list_temp)
+
+ft = tkFont.Font(family='微软雅黑', size=12, weight=tkFont.BOLD)
+btn_regret_game =Button(root, text="　悔棋　", bg="#d1b07e", fg="black", font=ft,
+                                 height="1", width="4", command=regret_game)
+btn_regret_game.pack()
+btn_regret_game.place(x=735,y=350)
 #左黑车
 black_left_rook = Rook("black_left_rook","車","black",(0,0),100)
 init_btn(black_left_rook)
@@ -585,6 +620,5 @@ init_btn(red_pawn5)
 
 
 root.update()
-copy_list = copy.deepcopy(list_chess)
+copy_list_chess.append(copy.deepcopy(list_chess))
 root.mainloop()
-
