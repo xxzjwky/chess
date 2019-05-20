@@ -446,14 +446,15 @@ def reset(list_temp):
     for item in list_temp:
         init_btn(item)
 
-    if  len(copy_list_chess) <= 1:
-        copy_list_chess[0] = copy.deepcopy(list_chess)
-    root.update()
+
+    copy_list_chess[-1] = copy.deepcopy(list_chess)
+
 
 #重新开始
 def restart():
     list_temp = copy_list_chess[0]
     copy_list_chess.clear()
+    copy_list_chess.append(list_temp)
     reset(list_temp)
 
 
