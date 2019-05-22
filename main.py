@@ -81,15 +81,20 @@ def simulate_move(chess,position):
     :return:
     """
     copy_list_chess = copy.deepcopy(list_chess)
+
+    #吃掉子的权重
+    eat_weight = 0
+
     for item in copy_list_chess:
         if item.position == position:
+            eat_weight = item.weight
             copy_list_chess.remove(item)
         elif item.position == chess.position:
             # 更新坐标
             item.position = position
             # 更新列表中的下标位置,并重置原属性
             item.pos_in_list = find_index(position)
-    return copy_list_chess
+    return (copy_list_chess,eat_weight)
 
 
 def judge_king(copy_list_chess,color):
@@ -130,7 +135,8 @@ def judge_can_move(chess,position):
     if passable_positions and position in passable_positions:
 
         #模拟移动
-        copy_list_chess = simulate_move(chess, position)
+        simulateMove = simulate_move(chess, position)
+        copy_list_chess = simulateMove[0]
 
         if judge_king(copy_list_chess,chess.color):
             return True
@@ -211,7 +217,8 @@ def get_best_edible_chess(chess):
     for i in range(len(list_chess)):
         chess_one = list_chess[i]
         #可吃并且不被将军
-        copy_list_chess = simulate_move(chess,chess_one.position)
+        simulateMove = simulate_move(chess, chess_one.position)
+        copy_list_chess = simulateMove[0]
         if chess_one.position in passable_positions and judge_king(copy_list_chess,chess.color):
             edible_chesses.append(chess_one)
 
@@ -320,7 +327,10 @@ def refresh_list_chess(chess,move_location):
             for item in enable_black_chesses:
                 passable_positions = item.get_passable_positions(list_chess)
                 for pos in passable_positions:
-                    copy_list_chess = simulate_move(item, pos)
+
+                    simulateMove = simulate_move(item, pos)
+                    copy_list_chess = simulateMove[0]
+
                     if judge_king(copy_list_chess, item.color):
                         result_item = item
                         result_position = pos
@@ -359,7 +369,10 @@ def refresh_list_chess(chess,move_location):
                     choice = choice_best_plan(enable_black_chesses)
                     choice_index = choice[0]
                     choice_position = choice[1]
-                    copy_list_chess = simulate_move(enable_black_chesses[choice_index], choice_position)
+
+                    simulateMove = simulate_move(enable_black_chesses[choice_index], choice_position)
+                    copy_list_chess = simulateMove[0]
+
                     if judge_king(copy_list_chess, enable_black_chesses[choice_index].color):
                         break
 
