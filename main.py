@@ -16,8 +16,8 @@ import copy
 #象棋列表
 list_chess = []
 
-#记录每一步棋子
-copy_list_chess = []
+#记录每一步
+every_step = []
 
 #当前点击的棋子
 click_item = {}
@@ -163,7 +163,7 @@ def click_chessboard(event):
             refresh_list_chess(chess,move_location)
 
             # 保存走子状态
-            copy_list_chess.append(copy.deepcopy(list_chess))
+            every_step.append(copy.deepcopy(list_chess))
 
 
 
@@ -418,7 +418,7 @@ def click(chess):
                     refresh_list_chess(click_item["data"], chess.position)
 
                     # 保存走子状态
-                    copy_list_chess.append(copy.deepcopy(list_chess))
+                    every_step.append(copy.deepcopy(list_chess))
 
 
 
@@ -464,14 +464,14 @@ def reset(list_temp):
         init_btn(item)
 
 
-    copy_list_chess[-1] = copy.deepcopy(list_chess)
+    every_step[-1] = copy.deepcopy(list_chess)
 
 
 #重新开始
 def restart():
-    list_temp = copy_list_chess[0]
-    copy_list_chess.clear()
-    copy_list_chess.append(list_temp)
+    list_temp = every_step[0]
+    every_step.clear()
+    every_step.append(list_temp)
     reset(list_temp)
 
 
@@ -483,12 +483,12 @@ btn_restart.place(x=735, y=430)
 
 #悔棋
 def regret_game():
-    if len(copy_list_chess) <= 1:
+    if len(every_step) <= 1:
         return
 
-    if len(copy_list_chess) > 1:
-        copy_list_chess.pop()
-    list_temp = copy_list_chess[-1]
+    if len(every_step) > 1:
+        every_step.pop()
+    list_temp = every_step[-1]
     reset(list_temp)
 
 ft = tkFont.Font(family='微软雅黑', size=12, weight=tkFont.BOLD)
@@ -643,5 +643,5 @@ init_btn(red_pawn5)
 
 
 root.update()
-copy_list_chess.append(copy.deepcopy(list_chess))
+every_step.append(copy.deepcopy(list_chess))
 root.mainloop()
