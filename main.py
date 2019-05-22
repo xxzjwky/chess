@@ -63,7 +63,7 @@ def warn(chess):
 def find_index(move_location):
     """
     找寻位置下标
-    :param move_location:
+    :param move_location:  从位置找下标
     :return:
     """
     for i in range(len(list_position)):
@@ -72,19 +72,15 @@ def find_index(move_location):
             if chess_one == move_location:
                 return (i,j)
 
-def judge_king(chess,position):
+
+def simulate_move(chess,position):
     """
-    判断如果该子走到目标位置，是否被将军
-    :param chess:
-    :param position:
+    　模拟移动后返回copy列表
+    :param chess:  棋子
+    :param position:　目标位置
     :return:
     """
     copy_list_chess = copy.deepcopy(list_chess)
-
-    # 王位
-    king_position = None
-
-
     for item in copy_list_chess:
         if item.position == position:
             copy_list_chess.remove(item)
@@ -93,7 +89,23 @@ def judge_king(chess,position):
             item.position = position
             # 更新列表中的下标位置,并重置原属性
             item.pos_in_list = find_index(position)
+    return copy_list_chess
 
+
+def judge_king(chess,position):
+    """
+    判断如果该子走到目标位置，是否被将军
+    :param chess:
+    :param position:
+    :return:
+    """
+    copy_list_chess = simulate_move(chess,position)
+
+    # 王位
+    king_position = None
+
+
+    for item in copy_list_chess:
         if chess.color == "black" and item.color == "black" and item.name == "将":
             king_position = item.position
         elif chess.color == "red" and item.color == "red" and item.name == "帅":
