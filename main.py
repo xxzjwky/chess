@@ -16,7 +16,7 @@ import copy
 #象棋列表
 list_chess = []
 
-
+#记录每一步棋子
 copy_list_chess = []
 
 #当前点击的棋子
