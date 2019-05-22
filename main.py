@@ -92,11 +92,11 @@ def simulate_move(chess,position):
     return copy_list_chess
 
 
-def judge_king(copy_list_chess,chess):
+def judge_king(copy_list_chess,color):
     """
     判断如果该子走到目标位置，是否被将军
     :param copy_list_chess: 模拟列表
-    :param chess 移动棋子
+    :param color 移动棋子
     :return:
     """
 
@@ -105,12 +105,12 @@ def judge_king(copy_list_chess,chess):
 
 
     for item in copy_list_chess:
-        if chess.color == "black" and item.color == "black" and item.name == "将":
+        if color == "black" and item.name == "将":
             king_position = item.position
-        elif chess.color == "red" and item.color == "red" and item.name == "帅":
+        elif color == "red" and item.name == "帅":
             king_position = item.position
 
-    for item in [one for one in copy_list_chess if one.color != chess.color]:
+    for item in [one for one in copy_list_chess if one.color != color]:
         if king_position in item.get_passable_positions(copy_list_chess):
             return False
 
@@ -132,7 +132,7 @@ def judge_can_move(chess,position):
         #模拟移动
         copy_list_chess = simulate_move(chess, position)
 
-        if judge_king(copy_list_chess,chess):
+        if judge_king(copy_list_chess,chess.color):
             return True
         else:
             warn(chess)
@@ -212,7 +212,7 @@ def get_best_edible_chess(chess):
         chess_one = list_chess[i]
         #可吃并且不被将军
         copy_list_chess = simulate_move(chess,chess_one.position)
-        if chess_one.position in passable_positions and judge_king(copy_list_chess,chess):
+        if chess_one.position in passable_positions and judge_king(copy_list_chess,chess.color):
             edible_chesses.append(chess_one)
 
     best_chess = None
@@ -261,6 +261,8 @@ def choice_best_plan(list_possible):
         return (random_index,random_position)
 
 
+
+
 def refresh_list_chess(chess,move_location):
     """
      刷新原列表中该棋子的位置
@@ -279,39 +281,37 @@ def refresh_list_chess(chess,move_location):
             #移除当前焦点
             del click_item["data"]
 
-
-
-    #行动的是红子，则下一步黑子行动
+    # 行动的是红子，则下一步黑子行动
     if chess.color == "red":
 
-        #黑将位置
+        # 黑将位置
         list_black_king = [item for item in list_chess if
-                                item.color == "black" and item.name=="将"]
-        #红子可走
+                           item.color == "black" and item.name == "将"]
+        # 红子可走
         enable_red_chesses = [item for item in list_chess if
-                                item.color == "red" and item.get_passable_positions(list_chess)]
+                              item.color == "red" and item.get_passable_positions(list_chess)]
 
-        #判断这会黑子是否处于被将军状态
+        # 判断这会黑子是否处于被将军状态
         bool_call_the_general = False
 
-        #无黑将则提示红方胜利
+        # 无黑将则提示红方胜利
         if not list_black_king:
             messagebox.askokcancel('消息框', '你赢了！！！')
             return
 
-        #判断被将军
+        # 判断被将军
         for item in enable_red_chesses:
             if list_black_king[0].position in item.get_passable_positions(list_chess):
                 bool_call_the_general = True
                 break
 
         enable_black_chesses = [item for item in list_chess if
-                                    item.color == "black" and item.get_passable_positions(list_chess)]
+                                item.color == "black" and item.get_passable_positions(list_chess)]
 
-        #如果被将军，则遍历可走子位置
+        # 如果被将军，则遍历可走子位置
         if bool_call_the_general:
-            #循环找解将的方法,如果循环完毕没解决则判定红方胜
-            #寻找目标位置
+            # 循环找解将的方法,如果循环完毕没解决则判定红方胜
+            # 寻找目标位置
             # 随机走一步不被将军的位置
 
             result_item = None
@@ -320,8 +320,8 @@ def refresh_list_chess(chess,move_location):
             for item in enable_black_chesses:
                 passable_positions = item.get_passable_positions(list_chess)
                 for pos in passable_positions:
-                    copy_list_chess = simulate_move(item,pos)
-                    if judge_king(copy_list_chess,item):
+                    copy_list_chess = simulate_move(item, pos)
+                    if judge_king(copy_list_chess, item.color):
                         result_item = item
                         result_position = pos
                         break
@@ -330,7 +330,7 @@ def refresh_list_chess(chess,move_location):
 
                 break
 
-            #无子可走
+            # 无子可走
             if not result_item:
                 messagebox.askokcancel('消息框', '你赢了！！！')
                 return
@@ -354,13 +354,13 @@ def refresh_list_chess(chess,move_location):
                 choice_index = None
                 choice_position = None
 
-                #直到找到一种不被将军的走法
+                # 直到找到一种不被将军的走法
                 while True:
                     choice = choice_best_plan(enable_black_chesses)
                     choice_index = choice[0]
                     choice_position = choice[1]
-                    copy_list_chess = simulate_move(enable_black_chesses[choice_index],choice_position)
-                    if judge_king(copy_list_chess,enable_black_chesses[choice_index]):
+                    copy_list_chess = simulate_move(enable_black_chesses[choice_index], choice_position)
+                    if judge_king(copy_list_chess, enable_black_chesses[choice_index].color):
                         break
 
                 # 移动位置有子则删除该子
@@ -373,8 +373,8 @@ def refresh_list_chess(chess,move_location):
                 enable_black_chesses[choice_index].position = choice_position
                 enable_black_chesses[choice_index].pos_in_list = find_index(choice_position)
 
-                dict_chessBtn[enable_black_chesses[choice_index].id].place(x=choice_position[0], y=choice_position[1])
-
+                dict_chessBtn[enable_black_chesses[choice_index].id].place(x=choice_position[0],
+                                                                           y=choice_position[1])
 
 
 def click(chess):
