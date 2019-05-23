@@ -1,19 +1,21 @@
 from chess import *
 
 
-def do_filter(chess_color, passable_positions,list_chesses):
+def do_filter(chess_color, can_move,can_protect,list_chesses):
     """
     过滤出真正返回位置
     :param chess_color: 当前棋子颜色
-    :param passable_positions:　前判断可走位置
+    :param can_move:　可移动位置
+    :param can_protect:可保护位置
     :return:  过滤出真正返回位置
     """
     vector_list = []
     for i in range(len(list_chesses)):
         chess_one = list_chesses[i]
-        if chess_one.position in passable_positions and chess_color == chess_one.color:
-            passable_positions.remove(chess_one.position)
-    return passable_positions
+        if chess_one.position in can_move and chess_color == chess_one.color:
+            can_move.remove(chess_one.position)
+            can_protect.append(chess_one.position)
+    return (can_move,can_protect)
 
 
 
@@ -21,7 +23,7 @@ def do_filter(chess_color, passable_positions,list_chesses):
 
 class Rook(Chess):
 
-    def collect_move_positions(self,can_move,list_chesses,vector):
+    def collect_move_positions(self,can_move,can_protect,list_chesses,vector):
 
         vector_list = []
 
@@ -102,6 +104,7 @@ class Rook(Chess):
         # 如果边界与本子颜色相同从列表中去掉
         if bond_chess and bond_chess.color == self.color:
             can_move.remove(list_position[bond_chess.pos_in_list[0]][bond_chess.pos_in_list[1]])
+            can_protect.append(list_position[bond_chess.pos_in_list[0]][bond_chess.pos_in_list[1]])
 
 
 
@@ -114,14 +117,17 @@ class Rook(Chess):
         获得该棋子可以移动的所有位置
         :return:
         """
+        #可移动的位置
         can_move = []
+        #可保护的位置
+        can_protect = []
 
-        self.collect_move_positions(can_move,list_chesses,"up")
-        self.collect_move_positions(can_move,list_chesses, "down")
-        self.collect_move_positions(can_move,list_chesses, "left")
-        self.collect_move_positions(can_move,list_chesses, "right")
+        self.collect_move_positions(can_move,can_protect,list_chesses,"up")
+        self.collect_move_positions(can_move,can_protect,list_chesses, "down")
+        self.collect_move_positions(can_move,can_protect,list_chesses, "left")
+        self.collect_move_positions(can_move,can_protect,list_chesses, "right")
 
-        return can_move
+        return (can_move,can_protect)
 
 
 class Knight(Chess):
@@ -135,6 +141,9 @@ class Knight(Chess):
         :return:
         """
         can_move = []
+
+        # 可保护的位置
+        can_protect = []
 
         x = self.pos_in_list[0]
         y = self.pos_in_list[1]
@@ -165,7 +174,7 @@ class Knight(Chess):
                 can_move.append(list_position[x - i][y - 2 * i])
             if x + 1 <= 9:
                 can_move.append(list_position[x + i][y - 2 * i])
-        return do_filter(self.color, can_move,list_chesses)
+        return do_filter(self.color, can_move,can_protect,list_chesses)
 
     def judge_block(self, vector, x, y,list_chesses):
         # 向上的判断
@@ -197,6 +206,10 @@ class Minister(Chess):
         :return:
         """
         can_move = []
+        # 可保护的位置
+        can_protect = []
+
+
         x = self.pos_in_list[0]
         y = self.pos_in_list[1]
         if self.color == "red":
@@ -235,7 +248,7 @@ class Minister(Chess):
                 if y + 2 <= 8 and self.judge_block("rightdown", x, y,list_chesses):
                     can_move.append(list_position[x + 2][y + 2])
 
-        return do_filter(self.color, can_move,list_chesses)
+        return do_filter(self.color, can_move,can_protect,list_chesses)
 
     def judge_block(self, vector, x, y,list_chesses):
         # 向左上的判断
@@ -271,6 +284,10 @@ class Guard(Chess):
         :return:
         """
         can_move = []
+
+        # 可保护的位置
+        can_protect = []
+
         x = self.pos_in_list[0]
         y = self.pos_in_list[1]
         if self.color == "red":
@@ -295,7 +312,7 @@ class Guard(Chess):
                     can_move.append(list_position[x + 1][y - 1])
                 if y + 1 <= 5:
                     can_move.append(list_position[x + 1][y + 1])
-        return do_filter(self.color, can_move,list_chesses)
+        return do_filter(self.color, can_move,can_protect,list_chesses)
 
 
 class King(Chess):
@@ -310,6 +327,10 @@ class King(Chess):
         :return:
         """
         can_move = []
+        # 可保护的位置
+        can_protect = []
+
+
         x = self.pos_in_list[0]
         y = self.pos_in_list[1]
 
@@ -376,7 +397,7 @@ class King(Chess):
             if bond_chess and bond_chess.name == "帅":
                 can_move.append(list_position[bond_chess.pos_in_list[0]][bond_chess.pos_in_list[1]])
 
-        return do_filter(self.color, can_move,list_chesses)
+        return do_filter(self.color, can_move,can_protect,list_chesses)
 
 
 class Gun(Chess):
@@ -385,7 +406,7 @@ class Gun(Chess):
     """
 
 
-    def collect_move_positions(self, can_move, vector,list_chesses):
+    def collect_move_positions(self, can_move,can_protect, vector,list_chesses):
         vector_list = []
         for item in list_chesses:
             if vector == "up":
@@ -482,6 +503,9 @@ class Gun(Chess):
             if second_chess and second_chess.color != self.color:
                 can_move.append(list_position[second_chess.pos_in_list[0]][second_chess.pos_in_list[1]])
 
+            #第二个子颜色相同则添加到可保护子列表
+            if second_chess and second_chess.color == self.color:
+                can_protect.append(list_position[second_chess.pos_in_list[0]][second_chess.pos_in_list[1]])
 
     def get_passable_positions(self,list_chesses):
         """
@@ -490,12 +514,15 @@ class Gun(Chess):
         """
         can_move = []
 
-        self.collect_move_positions(can_move, "up",list_chesses)
-        self.collect_move_positions(can_move, "down",list_chesses)
-        self.collect_move_positions(can_move, "left",list_chesses)
-        self.collect_move_positions(can_move, "right",list_chesses)
+        # 可保护的位置
+        can_protect = []
 
-        return can_move
+        self.collect_move_positions(can_move,can_protect, "up",list_chesses)
+        self.collect_move_positions(can_move,can_protect, "down",list_chesses)
+        self.collect_move_positions(can_move,can_protect, "left",list_chesses)
+        self.collect_move_positions(can_move,can_protect, "right",list_chesses)
+
+        return (can_move,can_protect)
 
 
 class Pawn(Chess):
@@ -509,6 +536,11 @@ class Pawn(Chess):
         :return:
         """
         can_move = []
+
+        # 可保护的位置
+        can_protect = []
+
+
         x = self.pos_in_list[0]
         y = self.pos_in_list[1]
         if self.color == "red":
@@ -531,5 +563,5 @@ class Pawn(Chess):
                     can_move.append(list_position[x][y + 1])
                 if y - 1 >= 0:
                     can_move.append(list_position[x][y - 1])
-        return do_filter(self.color, can_move,list_chesses)
+        return do_filter(self.color, can_move,can_protect,list_chesses)
 

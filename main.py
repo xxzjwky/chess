@@ -116,7 +116,7 @@ def judge_king(copy_list_chess,color):
             king_position = item.position
 
     for item in [one for one in copy_list_chess if one.color != color]:
-        if king_position in item.get_passable_positions(copy_list_chess):
+        if king_position in item.get_passable_positions(copy_list_chess)[0]:
             return False
 
     return True
@@ -131,7 +131,7 @@ def judge_can_move(chess,position):
     """
 
     # 符合移动条件
-    passable_positions = chess.get_passable_positions(list_chess)
+    passable_positions = chess.get_passable_positions(list_chess)[0]
     if passable_positions and position in passable_positions:
 
         #模拟移动
@@ -212,7 +212,7 @@ def get_best_edible_chess(chess):
     最优可吃子,根据权重判断
     :return:
     """
-    passable_positions = chess.get_passable_positions(list_chess)
+    passable_positions = chess.get_passable_positions(list_chess)[0]
     edible_chesses = []
     for i in range(len(list_chess)):
         chess_one = list_chess[i]
@@ -263,7 +263,7 @@ def choice_best_plan(list_possible):
         # 随机选一个子,和一个随机位置
         random_index = random.randint(0, len(list_possible) - 1)
         random_chess = list_possible[random_index]
-        passable_positions = random_chess.get_passable_positions(list_chess)
+        passable_positions = random_chess.get_passable_positions(list_chess)[0]
         random_position = passable_positions[random.randint(0, len(passable_positions) - 1)]
         return (random_index,random_position)
 
@@ -296,7 +296,7 @@ def refresh_list_chess(chess,move_location):
                            item.color == "black" and item.name == "将"]
         # 红子可走
         enable_red_chesses = [item for item in list_chess if
-                              item.color == "red" and item.get_passable_positions(list_chess)]
+                              item.color == "red" and item.get_passable_positions(list_chess)[0]]
 
         # 判断这会黑子是否处于被将军状态
         bool_call_the_general = False
@@ -308,12 +308,12 @@ def refresh_list_chess(chess,move_location):
 
         # 判断被将军
         for item in enable_red_chesses:
-            if list_black_king[0].position in item.get_passable_positions(list_chess):
+            if list_black_king[0].position in item.get_passable_positions(list_chess)[0]:
                 bool_call_the_general = True
                 break
 
         enable_black_chesses = [item for item in list_chess if
-                                item.color == "black" and item.get_passable_positions(list_chess)]
+                                item.color == "black" and item.get_passable_positions(list_chess)[0]]
 
         # 如果被将军，则遍历可走子位置
         if bool_call_the_general:
@@ -325,7 +325,7 @@ def refresh_list_chess(chess,move_location):
             result_position = None
 
             for item in enable_black_chesses:
-                passable_positions = item.get_passable_positions(list_chess)
+                passable_positions = item.get_passable_positions(list_chess)[0]
                 for pos in passable_positions:
 
                     simulateMove = simulate_move(item, pos)
